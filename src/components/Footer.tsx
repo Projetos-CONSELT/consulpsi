@@ -22,15 +22,12 @@ const Footer = () => {
       <div className="container mx-auto px-4 lg:px-8 py-14">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Bloco 1 — Logo */}
-          <div className="flex flex-col items-start gap-4">
+          <div className="flex items-center justify-center h-full">
             <img
               src={logo}
               alt="Consulpsi"
-              className="h-24 w-24 rounded-full object-contain border-2 border-accent/30 shadow-lg"
+              className="h-28 w-28 object-contain"
             />
-            <p className="text-accent/70 text-sm font-body leading-relaxed max-w-[220px]">
-              Empresa júnior de consultoria em Psicologia Organizacional e Recursos Humanos.
-            </p>
           </div>
 
           {/* Bloco 2 — Serviços */}
