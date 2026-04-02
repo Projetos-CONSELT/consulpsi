@@ -60,8 +60,6 @@ const Footer = () => {
                   <span className="block">consultoria.com.br</span>
                 </a>
               </li>
-                </a>
-              </li>
               <li className="leading-relaxed">
                 Bloco 2E121 — Campus Umuarama
                 <br />
