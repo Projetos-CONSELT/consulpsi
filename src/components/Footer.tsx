@@ -56,7 +56,10 @@ const Footer = () => {
                   href="mailto:contato@consulpsiconsultoria.com.br"
                   className="hover:text-accent transition-colors duration-300"
                 >
-                  contato@consulpsiconsultoria.com.br
+                  <span className="block">contato@consulpsi</span>
+                  <span className="block">consultoria.com.br</span>
+                </a>
+              </li>
                 </a>
               </li>
               <li className="leading-relaxed">
