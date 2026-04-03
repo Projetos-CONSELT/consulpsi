@@ -1,4 +1,4 @@
-import logo from "@/assets/logo-footer.png";
+import logo from "@/assets/logo-consulpsi.png";
 
 const servicosItems = [
   "Recrutamento e Seleção",

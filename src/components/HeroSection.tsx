@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import logoCircular from "@/assets/logo-footer.png";
+import logoConsulpsi from "@/assets/logo-consulpsi.png";
 
 const HeroSection = () => {
   const handleScrollTo = (id: string) => {
@@ -84,9 +84,9 @@ const HeroSection = () => {
             className="flex justify-center"
           >
             <motion.img
-              src={logoCircular}
+              src={logoConsulpsi}
               alt="Consulpsi Logo"
-              className="w-64 md:w-80 lg:w-96 drop-shadow-2xl"
+              className="w-72 md:w-80 lg:w-[26rem] drop-shadow-2xl"
               width={512}
               height={512}
               animate={{ y: [0, -8, 0] }}
