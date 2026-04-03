@@ -9,16 +9,31 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center bg-primary relative overflow-hidden pt-20"
+      className="min-h-screen flex items-center relative overflow-hidden pt-20"
+      style={{
+        background:
+          "linear-gradient(165deg, hsl(355 67% 26%) 0%, hsl(355 67% 24%) 40%, hsl(355 70% 21%) 100%)",
+      }}
     >
-      {/* Subtle decorative elements */}
+      {/* Subtle radial overlay for depth */}
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          background:
+            "radial-gradient(ellipse at 70% 40%, hsl(355 60% 30%) 0%, transparent 60%)",
+        }}
+      />
+
+      {/* Decorative blurred orbs */}
       <motion.div
-        className="absolute top-20 right-0 w-96 h-96 rounded-full bg-brand-medium/10 blur-3xl"
+        className="absolute top-20 right-0 w-96 h-96 rounded-full blur-3xl"
+        style={{ background: "hsl(355 60% 35% / 0.12)" }}
         animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-10 left-0 w-72 h-72 rounded-full bg-brand-dark/20 blur-3xl"
+        className="absolute bottom-10 left-0 w-72 h-72 rounded-full blur-3xl"
+        style={{ background: "hsl(355 70% 24% / 0.2)" }}
         animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.4, 0.2] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -30,9 +45,9 @@ const HeroSection = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
           >
-            {/* Título principal — fonte simples, cor clara para contraste */}
+            {/* Subtítulo superior */}
             <motion.p
-              className="font-body text-primary-foreground/80 text-xl mb-2 tracking-wide uppercase"
+              className="font-body text-primary-foreground/85 text-xl mb-3 tracking-[0.08em] uppercase font-medium"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -40,9 +55,9 @@ const HeroSection = () => {
               Consultoria em Psicologia
             </motion.p>
 
-            {/* Subtítulo — fonte cursiva (Satisfy/Genty), cor amarela */}
+            {/* Título script com destaque */}
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-accent leading-tight text-accent mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-accent leading-[1.15] text-accent mb-7 drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -50,9 +65,9 @@ const HeroSection = () => {
               Desenvolvendo pessoas, impulsionando organizações
             </motion.h1>
 
-            {/* Parágrafo descritivo — fonte body (Montserrat/Gatwick) */}
+            {/* Parágrafo descritivo */}
             <motion.p
-              className="font-body text-primary-foreground/70 text-lg mb-8 max-w-lg leading-relaxed"
+              className="font-body text-primary-foreground/75 text-lg mb-9 max-w-lg leading-[1.75] tracking-[0.01em]"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
@@ -62,11 +77,11 @@ const HeroSection = () => {
               potencializam o crescimento e o desempenho do seu negócio.
             </motion.p>
 
-            {/* Botão com hover e zoom */}
+            {/* Botão CTA refinado */}
             <motion.button
               onClick={() => handleScrollTo("#quem-somos")}
-              className="inline-block bg-accent text-accent-foreground font-semibold font-body px-8 py-3 rounded-lg text-sm transition-all duration-300 ease-out hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/30 active:scale-95"
-              whileHover={{ scale: 1.05 }}
+              className="inline-block bg-accent text-accent-foreground font-semibold font-body px-9 py-3.5 rounded-xl text-sm tracking-wide transition-all duration-300 ease-out shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_hsl(34_100%_70%_/_0.35)] hover:bg-accent/90 active:scale-95"
+              whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -76,22 +91,31 @@ const HeroSection = () => {
             </motion.button>
           </motion.div>
 
-          {/* Logo circular do IDV */}
+          {/* Logo com glow sutil */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex justify-center"
           >
-            <motion.img
-              src={logoConsulpsi}
-              alt="Consulpsi Logo"
-              className="w-72 md:w-80 lg:w-[26rem] drop-shadow-2xl"
-              width={512}
-              height={512}
+            <motion.div
+              className="relative"
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
+            >
+              {/* Glow behind logo */}
+              <div
+                className="absolute inset-0 rounded-full blur-2xl opacity-20 scale-110"
+                style={{ background: "hsl(34 100% 70% / 0.3)" }}
+              />
+              <img
+                src={logoConsulpsi}
+                alt="Consulpsi Logo"
+                className="w-72 md:w-80 lg:w-[26rem] drop-shadow-[0_8px_30px_rgba(0,0,0,0.25)] relative z-10"
+                width={512}
+                height={512}
+              />
+            </motion.div>
           </motion.div>
         </div>
       </div>
