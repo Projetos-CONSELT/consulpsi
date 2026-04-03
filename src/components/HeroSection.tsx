@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import logoCircular from "@/assets/logo-footer.png";
+import logoConsulpsi from "@/assets/logo-consulpsi.png";
 
 const HeroSection = () => {
   const handleScrollTo = (id: string) => {
