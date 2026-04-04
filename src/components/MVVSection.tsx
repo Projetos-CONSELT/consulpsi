@@ -39,7 +39,7 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front */}
-        <div className="absolute inset-0 bg-primary rounded-2xl flex flex-col items-center justify-center gap-4 shadow-lg" style={{ backfaceVisibility: "hidden" }}>
+        <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-4 shadow-lg" style={{ backfaceVisibility: "hidden", backgroundColor: "#8E2424" }}>
           <Icon className="text-primary-foreground" size={48} />
           <h3 className="text-2xl font-bold text-primary-foreground">{title}</h3>
           <p className="text-primary-foreground/60 text-xs font-body">Clique para saber mais</p>
@@ -60,7 +60,7 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
 
 const MVVSection = () => {
   return (
-    <section className="py-20 bg-secondary">
+    <section className="py-20" style={{ backgroundColor: "#621618" }}>
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ const MVVSection = () => {
           className="text-center mb-12"
         >
           <p className="font-accent text-brand-accent text-lg mb-2">Nossos Pilares</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">Missão, Visão e Valores</h2>
+          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: "#E6E5E4" }}>Missão, Visão e Valores</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
