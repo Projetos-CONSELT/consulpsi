@@ -3,7 +3,7 @@ import teamImage from "@/assets/team-consulpsi.jpg";
 
 const QuemSomosSection = () => {
   return (
-    <section id="quem-somos" className="py-20 bg-card">
+    <section id="quem-somos" className="py-20" style={{ backgroundColor: "#7C1D1D" }}>
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div

@@ -60,7 +60,7 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
 
 const MVVSection = () => {
   return (
-    <section className="py-20" style={{ backgroundColor: "#621618" }}>
+    <section className="py-20" style={{ backgroundColor: "#7C1D1D" }}>
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
