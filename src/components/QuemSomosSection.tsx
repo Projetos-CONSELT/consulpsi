@@ -3,8 +3,8 @@ import teamImage from "@/assets/team-consulpsi.jpg";
 
 const QuemSomosSection = () => {
   return (
-    <section id="quem-somos" className="py-20 relative" style={{ backgroundColor: "#7C1D1D" }}>
-        <div className="absolute bottom-0 left-0 right-0 h-24" style={{ background: "linear-gradient(to bottom, #7C1D1D, #621618)" }} />
+    <section id="quem-somos" className="py-20 pb-32 relative" style={{ backgroundColor: "#7C1D1D" }}>
+        <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: "linear-gradient(to bottom, #7C1D1D, #621618)" }} />
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div
