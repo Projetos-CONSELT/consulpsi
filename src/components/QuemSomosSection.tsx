@@ -13,11 +13,11 @@ const QuemSomosSection = () => {
             transition={{ duration: 0.6 }}
           >
             <p className="font-accent text-brand-accent text-lg mb-2">Conheça a Consulpsi</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">Quem Somos</h2>
-            <p className="text-muted-foreground mb-4 leading-relaxed">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 font-heading" style={{ color: "#D84444" }}>Quem Somos</h2>
+            <p className="mb-4 leading-relaxed text-justify" style={{ color: "#E6E5E4", fontFamily: "Araboto, sans-serif" }}>
               A Consulpsi é uma empresa júnior vinculada ao curso de Psicologia, especializada em consultoria e assessoria em Psicologia Organizacional e Recursos Humanos.
             </p>
-            <p className="text-muted-foreground mb-8 leading-relaxed">
+            <p className="mb-8 leading-relaxed text-justify" style={{ color: "#E6E5E4", fontFamily: "Araboto, sans-serif" }}>
               Nossa missão é entregar soluções estratégicas e personalizadas que promovam o desenvolvimento humano e organizacional, aliando teoria e prática com excelência e comprometimento.
             </p>
             <a
