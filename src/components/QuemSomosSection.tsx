@@ -36,6 +36,7 @@ const QuemSomosSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <img
+              style={{ boxShadow: "0 0 30px 8px rgba(0, 0, 0, 0.5)" }}
               src={teamImage}
               alt="Equipe Consulpsi"
               className="rounded-2xl shadow-xl w-full object-cover max-h-[400px]"
