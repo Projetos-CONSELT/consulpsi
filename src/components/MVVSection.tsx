@@ -39,10 +39,10 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
         style={{ transformStyle: "preserve-3d" }}
       >
         {/* Front */}
-        <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-4 shadow-lg" style={{ backfaceVisibility: "hidden", backgroundColor: "#D84444" }}>
-          <Icon style={{ color: "#E6E5E4" }} size={48} />
-          <h3 className="text-2xl font-bold" style={{ color: "#E6E5E4" }}>{title}</h3>
-          <p className="text-xs font-body" style={{ color: "rgba(230, 229, 228, 0.6)" }}>Clique para saber mais</p>
+        <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-4 shadow-lg" style={{ backfaceVisibility: "hidden", backgroundColor: "#8E2424" }}>
+          <Icon className="text-primary-foreground" size={48} />
+          <h3 className="text-2xl font-bold text-primary-foreground">{title}</h3>
+          <p className="text-primary-foreground/60 text-xs font-body">Clique para saber mais</p>
         </div>
 
         {/* Back */}
