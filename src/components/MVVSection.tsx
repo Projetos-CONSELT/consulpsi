@@ -69,7 +69,7 @@ const MVVSection = () => {
           className="text-center mb-12"
         >
           <p className="font-accent text-brand-accent text-lg mb-2">Nossos Pilares</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">Missão, Visão e Valores</h2>
+          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: "#E6E5E4" }}>Missão, Visão e Valores</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
