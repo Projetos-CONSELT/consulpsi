@@ -51,7 +51,7 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           <h3 className="text-xl font-bold text-accent-foreground mb-4 font-heading">{title}</h3>
-          <p className="text-accent-foreground/80 text-justify text-sm leading-relaxed font-body">{description}</p>
+          <p className="text-accent-foreground/80 text-center text-sm leading-relaxed font-body">{description}</p>
         </div>
       </motion.div>
     </div>
