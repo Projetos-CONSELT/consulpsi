@@ -50,8 +50,8 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
           className="absolute inset-0 bg-brand-accent rounded-2xl flex flex-col items-center justify-center p-6 shadow-lg"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
-          <h3 className="text-xl font-bold text-accent-foreground mb-4">{title}</h3>
-          <p className="text-accent-foreground/80 text-center text-sm leading-relaxed font-body">{description}</p>
+          <h3 className="text-xl font-bold text-accent-foreground mb-4 font-heading">{title}</h3>
+          <p className="text-accent-foreground/80 text-justify text-sm leading-relaxed font-body">{description}</p>
         </div>
       </motion.div>
     </div>
@@ -69,7 +69,7 @@ const MVVSection = () => {
           className="text-center mb-12"
         >
           <p className="font-accent text-brand-accent text-lg mb-2">Nossos Pilares</p>
-          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: "#E6E5E4" }}>Missão, Visão e Valores</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-heading" style={{ color: "#E6E5E4" }}>Missão, Visão e Valores</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
