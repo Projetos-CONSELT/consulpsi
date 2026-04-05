@@ -4,7 +4,7 @@ import teamImage from "@/assets/team-consulpsi.jpg";
 const QuemSomosSection = () => {
   return (
     <section id="quem-somos" className="py-20 pb-32 relative" style={{ backgroundColor: "#E6E5E4" }}>
-        <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: "linear-gradient(to bottom, #E6E5E4, #621618)" }} />
+        
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div
