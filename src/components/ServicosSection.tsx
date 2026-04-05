@@ -45,7 +45,7 @@ const ServicosSection = () => {
   const [selected, setSelected] = useState<number | null>(null);
 
   return (
-    <section id="servicos" className="py-20 bg-card">
+    <section id="servicos" className="py-20" style={{ backgroundColor: '#E6E5E4' }}>
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,7 +54,7 @@ const ServicosSection = () => {
           className="text-center mb-12"
         >
           <p className="font-accent text-brand-accent text-lg mb-2">O que fazemos</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">Nossos Serviços</h2>
+          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: '#621618' }}>Nossos Serviços</h2>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
