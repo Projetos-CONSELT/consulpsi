@@ -3,8 +3,8 @@ import teamImage from "@/assets/team-consulpsi.jpg";
 
 const QuemSomosSection = () => {
   return (
-    <section id="quem-somos" className="py-20 pb-32 relative" style={{ backgroundColor: "#7C1D1D" }}>
-        <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: "linear-gradient(to bottom, #7C1D1D, #621618)" }} />
+    <section id="quem-somos" className="py-20 pb-32 relative" style={{ backgroundColor: "#E6E5E4" }}>
+        <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: "linear-gradient(to bottom, #E6E5E4, #621618)" }} />
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -13,12 +13,12 @@ const QuemSomosSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="font-accent text-brand-accent text-lg mb-2">Conheça a Consulpsi</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 font-heading" style={{ color: "#D84444" }}>Quem Somos</h2>
-            <p className="mb-4 leading-relaxed text-justify" style={{ color: "#E6E5E4", fontFamily: "Araboto, sans-serif" }}>
+            <p className="font-accent text-lg mb-2" style={{ color: "#8E2424" }}>Conheça a Consulpsi</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 font-heading" style={{ color: "#621816" }}>Quem Somos</h2>
+            <p className="mb-4 leading-relaxed text-justify" style={{ color: "#7C1D1D", fontFamily: "Araboto, sans-serif" }}>
               A Consulpsi é uma empresa júnior vinculada ao curso de Psicologia, especializada em consultoria e assessoria em Psicologia Organizacional e Recursos Humanos.
             </p>
-            <p className="mb-8 leading-relaxed text-justify" style={{ color: "#E6E5E4", fontFamily: "Araboto, sans-serif" }}>
+            <p className="mb-8 leading-relaxed text-justify" style={{ color: "#7C1D1D", fontFamily: "Araboto, sans-serif" }}>
               Nossa missão é entregar soluções estratégicas e personalizadas que promovam o desenvolvimento humano e organizacional, aliando teoria e prática com excelência e comprometimento.
             </p>
             <a
