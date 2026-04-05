@@ -66,11 +66,11 @@ const ServicosSection = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               onClick={() => setSelected(i)}
-              className="rounded-xl p-6 text-left hover:shadow-lg transition-all hover:-translate-y-1 group" style={{ backgroundColor: '#969696' }}
+              className="bg-secondary rounded-xl p-6 text-left hover:shadow-lg transition-all hover:-translate-y-1 group"
             >
               <service.icon className="text-primary mb-4 group-hover:text-brand-light transition-colors" size={36} />
               <h3 className="font-bold text-foreground text-lg mb-2">{service.title}</h3>
-              <p className="text-sm" style={{ color: '#621618' }}>{service.brief}</p>
+              <p className="text-muted-foreground text-sm">{service.brief}</p>
             </motion.button>
           ))}
         </div>
