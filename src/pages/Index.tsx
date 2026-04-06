@@ -18,6 +18,9 @@ const Index = () => {
         <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 100%)', backgroundColor: '#E6E5E4' }} />
       </div>
       <MVVSection />
+      <div className="h-16 relative" style={{ backgroundColor: '#E6E5E4' }}>
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 100%)', backgroundColor: '#621618' }} />
+      </div>
       <ServicosSection />
       <CasesSection />
       <ContatoSection />
