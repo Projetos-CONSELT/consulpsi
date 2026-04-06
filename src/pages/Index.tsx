@@ -14,6 +14,7 @@ const Index = () => {
       <Header />
       <HeroSection />
       <QuemSomosSection />
+      <div className="h-16" style={{ background: 'linear-gradient(to bottom, #E6E5E4, #621618)' }} />
       <MVVSection />
       <ServicosSection />
       <CasesSection />
