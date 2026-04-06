@@ -105,7 +105,7 @@ const ServicosSection = () => {
                   <>
                     <s.icon className="text-primary mb-4" size={48} />
                     <h3 className="text-2xl font-bold text-foreground mb-4">{s.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed font-body">{s.detail}</p>
+                    <p className="text-muted-foreground leading-relaxed font-body text-justify" style={{ fontFamily: 'Montserrat, sans-serif' }}>{s.detail}</p>
                     <a
                       href="#contato"
                       className="inline-block mt-6 bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg hover:bg-brand-medium transition-colors text-sm"
