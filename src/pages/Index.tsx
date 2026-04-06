@@ -14,7 +14,9 @@ const Index = () => {
       <Header />
       <HeroSection />
       <QuemSomosSection />
-      <div className="h-16" style={{ background: 'linear-gradient(to bottom, #E6E5E4, #621618)' }} />
+      <div className="h-16 relative" style={{ backgroundColor: '#621618' }}>
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 100%)', backgroundColor: '#E6E5E4' }} />
+      </div>
       <MVVSection />
       <ServicosSection />
       <CasesSection />
