@@ -53,7 +53,7 @@ const ServicosSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <p className="font-accent text-brand-accent text-lg mb-2">O que fazemos</p>
+          <p className="font-accent text-lg mb-2" style={{ color: '#D84444' }}>O que fazemos</p>
           <h2 className="text-3xl md:text-4xl font-bold" style={{ color: '#621618' }}>Nossos Serviços</h2>
         </motion.div>
 
