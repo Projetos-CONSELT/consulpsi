@@ -66,7 +66,7 @@ const ServicosSection = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               onClick={() => setSelected(i)}
-              className="rounded-xl p-6 text-left hover:shadow-lg transition-all hover:-translate-y-1 group border border-[#621618] bg-[#ffffff]"
+              className="bg-secondary rounded-xl p-6 text-left hover:shadow-lg transition-all hover:-translate-y-1 group border border-[#621618]"
             >
               <service.icon className="text-primary mb-4 group-hover:text-brand-light transition-colors" size={36} />
               <h3 className="font-bold text-foreground text-lg mb-2">{service.title}</h3>
