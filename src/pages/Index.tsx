@@ -13,16 +13,25 @@ const Index = () => {
     <>
       <Header />
       <HeroSection />
-      <QuemSomosSection />
       <div className="h-16 relative" style={{ backgroundColor: '#621618' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 100%)', backgroundColor: '#E6E5E4' }} />
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#E6E5E4' }} />
+      </div>
+      <QuemSomosSection />
+      <div className="h-16 relative" style={{ backgroundColor: '#E6E5E4' }}>
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#621618' }} />
       </div>
       <MVVSection />
-      <div className="h-16 relative" style={{ backgroundColor: '#E6E5E4' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 100%)', backgroundColor: '#621618' }} />
+      <div className="h-16 relative" style={{ backgroundColor: '#621618' }}>
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#E6E5E4' }} />
       </div>
       <ServicosSection />
+      <div className="h-16 relative" style={{ backgroundColor: '#E6E5E4' }}>
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#621618' }} />
+      </div>
       <CasesSection />
+      <div className="h-16 relative" style={{ backgroundColor: '#621618' }}>
+        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#E6E5E4' }} />
+      </div>
       <ContatoSection />
       <Footer />
       <WhatsAppButton />
