@@ -17,7 +17,7 @@ const ContatoSection = () => {
   };
 
   return (
-    <section id="contato" className="py-20 bg-card">
+    <section id="contato" className="py-20" style={{ backgroundColor: "#E6E5E4" }}>
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -76,7 +76,7 @@ const ContatoSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             onSubmit={handleSubmit}
-            className="bg-secondary rounded-2xl p-8 space-y-5"
+            className="relative bg-white border border-[#621816]/25 rounded-2xl p-8 space-y-5 shadow-[0_14px_30px_rgba(98,24,22,0.15)]"
           >
             <div>
               <label className="text-sm font-medium text-foreground font-body block mb-2">Nome</label>
@@ -84,7 +84,7 @@ const ContatoSection = () => {
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full bg-card border border-border rounded-lg px-4 py-3 text-foreground text-sm font-body focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full bg-[#FCFCFC] border border-[#D4C7C7] rounded-lg px-4 py-3 text-foreground text-sm font-body focus:ring-2 focus:ring-[#621816] focus:outline-none"
                 placeholder="Seu nome completo"
                 maxLength={100}
               />
@@ -95,7 +95,7 @@ const ContatoSection = () => {
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full bg-card border border-border rounded-lg px-4 py-3 text-foreground text-sm font-body focus:ring-2 focus:ring-primary focus:outline-none"
+                className="w-full bg-[#FCFCFC] border border-[#D4C7C7] rounded-lg px-4 py-3 text-foreground text-sm font-body focus:ring-2 focus:ring-[#621816] focus:outline-none"
                 placeholder="seu@email.com"
                 maxLength={255}
               />
@@ -106,7 +106,7 @@ const ContatoSection = () => {
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 rows={4}
-                className="w-full bg-card border border-border rounded-lg px-4 py-3 text-foreground text-sm font-body focus:ring-2 focus:ring-primary focus:outline-none resize-none"
+                className="w-full bg-[#FCFCFC] border border-[#D4C7C7] rounded-lg px-4 py-3 text-foreground text-sm font-body focus:ring-2 focus:ring-[#621816] focus:outline-none resize-none"
                 placeholder="Como podemos ajudar?"
                 maxLength={1000}
               />
