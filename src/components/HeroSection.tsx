@@ -11,8 +11,7 @@ const HeroSection = () => {
       id="home"
       className="min-h-screen flex items-center relative overflow-hidden pt-20"
       style={{
-        background:
-          "linear-gradient(165deg, hsl(355 67% 26%) 0%, hsl(355 67% 24%) 40%, hsl(355 70% 21%) 100%)",
+        backgroundColor: "#66141B",
       }}
     >
       {/* Subtle radial overlay for depth */}

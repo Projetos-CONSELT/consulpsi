@@ -6,18 +6,43 @@ import { toast } from "sonner";
 const ContatoSection = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
-    toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");
-    setForm({ name: "", email: "", message: "" });
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/arthurmcuoco@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          _subject: "Website Consulpsi",
+          _template: "table",
+          _captcha: "false",
+          nome: form.name.trim(),
+          email: form.email.trim(),
+          mensagem: form.message.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Falha no envio do formulário");
+      }
+
+      toast.success("Mensagem enviada com sucesso! Verifique a caixa de entrada.");
+      setForm({ name: "", email: "", message: "" });
+    } catch {
+      toast.error("Não foi possível enviar agora. Tente novamente em instantes.");
+    }
   };
 
   return (
-    <section id="contato" className="py-20" style={{ backgroundColor: "#E6E5E4" }}>
+    <section id="contato" className="pt-20 pb-[84px]" style={{ backgroundColor: "#E6E5E4" }}>
       <div className="container mx-auto px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
