@@ -68,7 +68,7 @@ const ServicosSection = () => {
               onClick={() => setSelected(i)}
               className="bg-secondary rounded-xl p-6 text-left hover:shadow-lg transition-all hover:-translate-y-1 group border border-[#621618]"
             >
-              <service.icon className="text-primary mb-4 group-hover:text-brand-light transition-colors" size={36} />
+              <service.icon className="text-primary mb-4 group-hover:text-[#d84444] transition-colors" size={36} />
               <h3 className="font-bold text-foreground text-lg mb-2">{service.title}</h3>
               <p className="text-muted-foreground text-sm">{service.brief}</p>
             </motion.button>

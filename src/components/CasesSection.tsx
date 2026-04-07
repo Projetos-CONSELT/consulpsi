@@ -45,7 +45,7 @@ const CasesSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <p className="font-accent text-brand-accent text-lg mb-2">Depoimentos</p>
+          <p className="font-accent text-[#FFB964] text-lg mb-2">Depoimentos</p>
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground">Cases de Sucesso</h2>
         </motion.div>
 
@@ -59,7 +59,7 @@ const CasesSection = () => {
               transition={{ duration: 0.4 }}
               className="bg-card rounded-2xl p-8 md:p-12 shadow-xl text-center"
             >
-              <Quote className="text-brand-accent mx-auto mb-6" size={40} />
+              <Quote className="text-[#FFB964] mx-auto mb-6" size={40} />
               <p className="text-foreground text-lg md:text-xl italic leading-relaxed mb-8 font-body">
                 "{testimonials[current].text}"
               </p>
@@ -77,7 +77,7 @@ const CasesSection = () => {
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className={`w-3 h-3 rounded-full transition-colors ${i === current ? "bg-brand-accent" : "bg-card/30"}`}
+                  className={`w-3 h-3 rounded-full transition-colors ${i === current ? "bg-[#FFB964]" : "bg-card/30"}`}
                   aria-label={`Depoimento ${i + 1}`}
                 />
               ))}

@@ -25,7 +25,7 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
 
   return (
     <div
-      className="cursor-pointer perspective-1000 h-64"
+      className="group cursor-pointer perspective-1000 h-64 overflow-hidden rounded-2xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg"
       onClick={() => setFlipped(!flipped)}
       onKeyDown={(e) => e.key === "Enter" && setFlipped(!flipped)}
       tabIndex={0}
@@ -33,21 +33,21 @@ const FlipCard = ({ title, icon: Icon, description }: typeof cards[0]) => {
       aria-label={`${title} - clique para ver mais`}
     >
       <motion.div
-        className="relative w-full h-full"
+        className="relative w-full h-full transform-gpu"
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{ duration: 0.6 }}
-        style={{ transformStyle: "preserve-3d" }}
+        style={{ transformStyle: "preserve-3d", willChange: "transform" }}
       >
         {/* Front */}
-        <div className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center gap-4 shadow-lg" style={{ backfaceVisibility: "hidden", backgroundColor: "#8E2424" }}>
-          <Icon className="text-primary-foreground" size={48} />
-          <h3 className="text-2xl font-bold text-primary-foreground">{title}</h3>
-          <p className="text-primary-foreground/60 text-xs font-body">Clique para saber mais</p>
+        <div className="absolute inset-0 rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-4 shadow-lg transition-all duration-300 ease-out group-hover:shadow-lg" style={{ backfaceVisibility: "hidden", backgroundColor: "#8E2424" }}>
+          <Icon className="text-primary-foreground group-hover:text-[#FFB964] transition-colors duration-300" size={48} />
+          <h3 className="text-2xl font-bold text-primary-foreground group-hover:text-[#FFB964] transition-colors duration-300">{title}</h3>
+          <p className="text-primary-foreground/60 text-xs font-body group-hover:text-[#FFB964] transition-colors duration-300">Clique para saber mais</p>
         </div>
 
         {/* Back */}
         <div
-          className="absolute inset-0 bg-brand-accent rounded-2xl flex flex-col items-center justify-center p-6 shadow-lg"
+          className="absolute inset-0 bg-[#FFB964] rounded-2xl flex flex-col items-center justify-center p-6 shadow-lg"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           <h3 className="text-xl font-bold text-accent-foreground mb-4 font-heading">{title}</h3>
@@ -68,7 +68,7 @@ const MVVSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <p className="font-accent text-brand-accent text-lg mb-2">Nossos Pilares</p>
+          <p className="font-accent text-[#FFB964] text-lg mb-2">Nossos Pilares</p>
           <h2 className="text-3xl md:text-4xl font-bold font-heading" style={{ color: "#E6E5E4" }}>Missão, Visão e Valores</h2>
         </motion.div>
 

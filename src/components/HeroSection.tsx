@@ -56,7 +56,7 @@ const HeroSection = () => {
 
             {/* Título script com destaque */}
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-accent leading-[1.15] text-accent mb-7 drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+              className="text-4xl md:text-5xl lg:text-6xl font-accent leading-[1.15] text-[#FFB964] mb-7 drop-shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -79,7 +79,7 @@ const HeroSection = () => {
             {/* Botão CTA refinado */}
             <motion.button
               onClick={() => handleScrollTo("#quem-somos")}
-              className="inline-block bg-accent text-accent-foreground font-semibold font-body px-9 py-3.5 rounded-xl text-sm tracking-wide transition-all duration-300 ease-out shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_hsl(34_100%_70%_/_0.35)] hover:bg-accent/90 active:scale-95"
+              className="inline-block bg-[#FFB964] text-accent-foreground font-semibold font-body px-9 py-3.5 rounded-xl text-sm tracking-wide transition-all duration-300 ease-out shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_rgba(255,185,100,0.35)] hover:bg-[#FFB964]/90 active:scale-95"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
               initial={{ opacity: 0, y: 10 }}
@@ -105,7 +105,7 @@ const HeroSection = () => {
               {/* Glow behind logo */}
               <div
                 className="absolute inset-0 rounded-full blur-2xl opacity-20 scale-110"
-                style={{ background: "hsl(34 100% 70% / 0.3)" }}
+                style={{ background: "rgba(255, 185, 100, 0.3)" }}
               />
               <img
                 src={logoConsulpsi}
