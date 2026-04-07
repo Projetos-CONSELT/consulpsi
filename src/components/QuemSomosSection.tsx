@@ -3,7 +3,7 @@ import teamImage from "@/assets/team-consulpsi.jpg";
 
 const QuemSomosSection = () => {
   return (
-    <section id="quem-somos" className="py-16 pb-28 relative" style={{ backgroundColor: "#E6E5E4" }}>
+    <section id="quem-somos" className="py-14 pb-25 relative" style={{ backgroundColor: "#E6E5E4" }}>
         
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
