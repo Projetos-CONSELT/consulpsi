@@ -1,4 +1,4 @@
-import logo from "@/assets/logo-consulpsi.png";
+import logo from "@/assets/logo-consulpsi-hero.png";
 
 const servicosItems = [
   "Recrutamento e Seleção",
@@ -88,7 +88,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://www.linkedin.com/company/consulpsi-empresa-júnior/"
+                href="https://www.linkedin.com/in/consulpsiconsultoria/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import logoConsulpsi from "@/assets/logo-consulpsi.png";
+import logoConsulpsi from "@/assets/logo-consulpsi-hero.png";
 
 const HeroSection = () => {
   const handleScrollTo = (id: string) => {
