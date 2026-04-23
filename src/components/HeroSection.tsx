@@ -1,3 +1,4 @@
+/* Assinatura Digital Conselt - Empresa Junior de Consultoria em Engenharia Elétrica */
 import { motion } from "framer-motion";
 import logoConsulpsi from "@/assets/logo-consulpsi-hero.png";
 
@@ -113,6 +114,8 @@ const HeroSection = () => {
                 className="w-72 md:w-80 lg:w-[26rem] drop-shadow-[0_8px_30px_rgba(0,0,0,0.25)] relative z-10"
                 width={512}
                 height={512}
+                fetchPriority="high"
+                decoding="async"
               />
             </motion.div>
           </motion.div>

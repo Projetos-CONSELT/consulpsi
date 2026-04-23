@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import teamImage from "@/assets/team-consulpsi.jpg";
+import teamImage from "../../imagens/secao-2-equipe/equipe-consulpsi-secao-2.png";
 
 const QuemSomosSection = () => {
   return (

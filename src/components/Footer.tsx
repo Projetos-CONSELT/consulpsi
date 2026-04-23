@@ -1,3 +1,4 @@
+/* Assinatura Digital Conselt - Empresa Junior de Consultoria em Engenharia Elétrica */
 import logo from "@/assets/logo-consulpsi-hero.png";
 
 const servicosItems = [
@@ -27,6 +28,10 @@ const Footer = () => {
               src={logo}
               alt="Consulpsi"
               className="h-28 w-28 object-contain"
+              loading="lazy"
+              decoding="async"
+              width={112}
+              height={112}
             />
           </div>
 

@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* Assinatura Digital Conselt - Empresa Junior de Consultoria em Engenharia Elétrica */
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Brain, ClipboardList, BarChart3, Lightbulb, GraduationCap, X } from "lucide-react";
 
@@ -43,6 +44,10 @@ const services = [
 
 const ServicosSection = () => {
   const [selected, setSelected] = useState<number | null>(null);
+  const selectedService = useMemo(
+    () => (selected === null ? null : services[selected]),
+    [selected],
+  );
 
   return (
     <section id="servicos" className="py-20" style={{ backgroundColor: '#E6E5E4' }}>
@@ -77,7 +82,7 @@ const ServicosSection = () => {
       </div>
 
       <AnimatePresence>
-        {selected !== null && (
+        {selectedService && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -99,23 +104,16 @@ const ServicosSection = () => {
               >
                 <X size={24} />
               </button>
-              {(() => {
-                const s = services[selected];
-                return (
-                  <>
-                    <s.icon className="text-primary mb-4" size={48} />
-                    <h3 className="text-2xl font-bold text-foreground mb-4">{s.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed font-body text-justify" style={{ fontFamily: 'Montserrat, sans-serif' }}>{s.detail}</p>
-                    <a
-                      href="#contato"
-                      className="inline-block mt-6 bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg hover:bg-brand-medium transition-colors text-sm"
-                      onClick={(e) => { e.preventDefault(); setSelected(null); document.querySelector("#contato")?.scrollIntoView({ behavior: "smooth" }); }}
-                    >
-                      Solicitar Orçamento
-                    </a>
-                  </>
-                );
-              })()}
+              <selectedService.icon className="text-primary mb-4" size={48} />
+              <h3 className="text-2xl font-bold text-foreground mb-4">{selectedService.title}</h3>
+              <p className="text-muted-foreground leading-relaxed font-body text-justify" style={{ fontFamily: 'Montserrat, sans-serif' }}>{selectedService.detail}</p>
+              <a
+                href="#contato"
+                className="inline-block mt-6 bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg hover:bg-brand-medium transition-colors text-sm"
+                onClick={(e) => { e.preventDefault(); setSelected(null); document.querySelector("#contato")?.scrollIntoView({ behavior: "smooth" }); }}
+              >
+                Solicitar Orçamento
+              </a>
             </motion.div>
           </motion.div>
         )}

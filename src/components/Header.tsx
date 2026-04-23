@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+/* Assinatura Digital Conselt - Empresa Junior de Consultoria em Engenharia Elétrica */
+import { useState, useEffect, useCallback } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo-consulpsi-header.png";
 
@@ -16,14 +17,15 @@ const Header = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleClick = (href: string) => {
+  const handleClick = useCallback((href: string) => {
     setMobileOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   return (
     <header
@@ -44,6 +46,9 @@ const Header = () => {
             src={logo}
             alt="Consulpsi"
             className="h-12 w-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
+            width={240}
+            height={96}
+            decoding="async"
           />
         </button>
 

@@ -1,3 +1,4 @@
+/* Assinatura Digital Conselt - Empresa Junior de Consultoria em Engenharia Elétrica */
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import QuemSomosSection from "@/components/QuemSomosSection";
