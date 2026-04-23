@@ -3,42 +3,117 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
+import {
+  sanitizeName,
+  sanitizeEmail,
+  sanitizeMessage,
+  validateFormData,
+  formRateLimiter,
+  validateCSRFToken,
+  initializeCSRFToken,
+  validateAPIResponse,
+  securityLogger,
+  validateAgainstMalicious,
+} from "@/lib/security";
 
 const ContatoSection = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [csrfToken] = useState(() => initializeCSRFToken());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      toast.error("Por favor, preencha todos os campos.");
+    
+    // Rate limiting (máximo 3 tentativas por minuto)
+    if (!formRateLimiter.isAllowed("contact-form")) {
+      toast.error("Muitas tentativas. Por favor, aguarde um momento.");
+      securityLogger.log(
+        "rate-limit-exceeded",
+        "Limite de taxa excedido no formulário de contato",
+        "medium"
+      );
       return;
     }
 
+    // Validação básica
     try {
-      const response = await fetch("https://formsubmit.co/ajax/arthurmcuoco@gmail.com", {
+      validateFormData(form);
+    } catch (error) {
+      toast.error((error as Error).message);
+      return;
+    }
+
+    // Verificar CSRF token
+    if (!validateCSRFToken(csrfToken)) {
+      toast.error("Sessão inválida. Por favor, recarregue a página.");
+      securityLogger.log(
+        "csrf-validation-failed",
+        "Validação CSRF falhou",
+        "high"
+      );
+      return;
+    }
+
+    // Sanitizar inputs
+    try {
+      const sanitizedName = sanitizeName(form.name);
+      const sanitizedEmail = sanitizeEmail(form.email);
+      const sanitizedMessage = sanitizeMessage(form.message);
+
+      // Validar contra conteúdo malicioso
+      validateAgainstMalicious(sanitizedName, "Nome");
+      validateAgainstMalicious(sanitizedEmail, "Email");
+      validateAgainstMalicious(sanitizedMessage, "Mensagem");
+
+      setIsSubmitting(true);
+
+      const response = await fetch("https://formsubmit.co/ajax/contato@consulpsi.com.br", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          _subject: "Website Consulpsi",
+          _subject: "Nova mensagem do site Consulpsi",
           _template: "table",
           _captcha: "false",
-          nome: form.name.trim(),
-          email: form.email.trim(),
-          mensagem: form.message.trim(),
+          _next: "https://www.consulpsi.com.br/",
+          nome: sanitizedName,
+          email: sanitizedEmail,
+          mensagem: sanitizedMessage,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent.substring(0, 100),
         }),
       });
+
+      // Validar resposta
+      validateAPIResponse(response);
 
       if (!response.ok) {
         throw new Error("Falha no envio do formulário");
       }
 
-      toast.success("Mensagem enviada com sucesso! Verifique a caixa de entrada.");
+      toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");
       setForm({ name: "", email: "", message: "" });
-    } catch {
-      toast.error("Não foi possível enviar agora. Tente novamente em instantes.");
+      
+      // Log de sucesso
+      securityLogger.log(
+        "form-submission-success",
+        "Formulário de contato enviado com sucesso",
+        "low"
+      );
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      toast.error(errorMessage || "Não foi possível enviar agora. Tente novamente em instantes.");
+      
+      securityLogger.log(
+        "form-submission-error",
+        `Erro ao enviar formulário: ${errorMessage}`,
+        "medium",
+        { error: errorMessage }
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -152,11 +227,18 @@ const ContatoSection = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-lg hover:bg-brand-medium transition-colors flex items-center justify-center gap-2 text-sm"
+              disabled={isSubmitting}
+              className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-lg hover:bg-brand-medium transition-colors flex items-center justify-center gap-2 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Send size={16} />
-              Enviar Mensagem
+              {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
             </button>
+            
+            {/* Aviso de conformidade */}
+            <p className="text-xs text-muted-foreground text-center pt-4 border-t border-gray-200">
+              Seus dados são protegidos de acordo com nossa Política de Privacidade. 
+              <a href="/privacy-policy" className="text-primary hover:underline ml-1">Saiba mais</a>
+            </p>
           </motion.form>
         </div>
       </div>

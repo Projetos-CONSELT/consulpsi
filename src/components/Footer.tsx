@@ -1,4 +1,5 @@
 /* Assinatura Digital Conselt - Empresa Junior de Consultoria em Engenharia Elétrica */
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo-consulpsi-hero.png";
 
 const servicosItems = [
@@ -117,7 +118,30 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Bloco 4 — Localização */}
+          {/* Bloco 4 — Legal */}
+          <div>
+            <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Legal</h4>
+            <ul className="space-y-2.5 text-sm font-body text-primary-foreground/70">
+              <li>
+                <Link
+                  to="/privacy-policy"
+                  className="inline-block relative transition-all duration-300 hover:text-[#FFB964] hover:translate-x-1 after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-px after:bg-[#FFB964]/50 after:transition-all after:duration-300"
+                >
+                  Política de Privacidade
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="inline-block relative transition-all duration-300 hover:text-[#FFB964] hover:translate-x-1 after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-px after:bg-[#FFB964]/50 after:transition-all after:duration-300"
+                >
+                  Condições de Uso
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Bloco 5 — Localização */}
           <div>
             <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Localização</h4>
             <div className="rounded-lg overflow-hidden border border-[#FFB964]/20 shadow-md">
