@@ -35,17 +35,17 @@ const Header = () => {
           : "bg-primary"
       }`}
     >
-      <div className="container mx-auto grid grid-cols-[1fr_auto_1fr] items-center py-[14px] px-4 lg:px-8">
+      <div className="container mx-auto flex items-center justify-between py-[14px] px-4 lg:px-8 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center">
         {/* Logo — esquerda */}
         <button
           onClick={() => handleClick("#home")}
           aria-label="Voltar ao início"
-          className="justify-self-start transition-all duration-300 ease-out hover:scale-105 active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB964]/40 rounded-sm"
+          className="justify-self-start min-w-0 transition-all duration-300 ease-out hover:scale-105 active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB964]/40 rounded-sm"
         >
           <img
             src={logo}
             alt="Consulpsi"
-            className="h-12 w-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
+            className="h-12 w-auto max-w-full drop-shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
             width={240}
             height={96}
             decoding="async"
@@ -87,7 +87,7 @@ const Header = () => {
       {/* Menu mobile */}
       {mobileOpen && (
         <div className="md:hidden bg-primary/98 backdrop-blur-lg border-t border-primary-foreground/10 animate-fade-in">
-          <nav className="flex flex-col py-4 px-6 gap-4">
+          <nav className="flex max-h-[calc(100vh-88px)] flex-col overflow-y-auto py-4 px-6 gap-4">
             {navItems.map((item) => (
               <button key={item.href} onClick={() => handleClick(item.href)} className="text-left text-sm font-bold font-body text-[#969696] hover:text-[#FFB964] py-2 transition-all duration-300 ease-out hover:translate-x-1 origin-left">
                 {item.label}
