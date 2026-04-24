@@ -21,10 +21,10 @@ const Footer = () => {
       {/* Decorative top line */}
       <div className="h-1 w-full bg-gradient-to-r from-transparent via-[#FFB964] to-transparent opacity-60" />
 
-      <div className="container mx-auto px-4 lg:px-8 py-14">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+      <div className="container mx-auto px-5 sm:px-4 lg:px-8 py-14">
+        <div className="grid grid-cols-1 items-start gap-12 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4 lg:gap-8">
           {/* Bloco 1 — Logo */}
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-center justify-center h-full max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             <img
               src={logo}
               alt="Consulpsi"
@@ -37,7 +37,7 @@ const Footer = () => {
           </div>
 
           {/* Bloco 2 — Serviços */}
-          <div>
+          <div className="max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Serviços</h4>
             <ul className="space-y-2.5">
               {servicosItems.map((item) => (
@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
 
           {/* Bloco 3 — Contato + Legal */}
-          <div className="space-y-8">
+          <div className="space-y-8 max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             {/* Contato */}
             <div>
               <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Contato</h4>
@@ -145,7 +145,7 @@ const Footer = () => {
           </div>
 
           {/* Bloco 4 — Localização */}
-          <div>
+          <div className="max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Localização</h4>
             <div className="rounded-lg overflow-hidden border border-[#FFB964]/20 shadow-md">
               <iframe
@@ -163,7 +163,7 @@ const Footer = () => {
         </div>
 
         {/* Divider + Copyright */}
-        <div className="border-t border-[#FFB964]/15 mt-12 pt-6 text-center">
+        <div className="border-t border-[#FFB964]/15 mt-12 pt-6 text-center max-w-[22rem] mx-auto sm:max-w-none">
           <p className="text-primary-foreground/40 text-xs font-body tracking-wider transition-all duration-300 hover:text-[#FFB964] hover:translate-y-[-1px]">
             © {new Date().getFullYear()} Consulpsi — Todos os direitos reservados.
           </p>
