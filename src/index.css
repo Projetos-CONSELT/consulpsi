@@ -87,3 +87,13 @@
 html {
   scroll-behavior: smooth;
 }
+
+@media (max-width: 639px) {
+  .footer-mobile-panel {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left;
+  }
+}

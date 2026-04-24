@@ -37,7 +37,7 @@ const Footer = () => {
           </div>
 
           {/* Bloco 2 — Serviços */}
-          <div className="max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
+          <div className="footer-mobile-panel max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Serviços</h4>
             <ul className="space-y-2.5">
               {servicosItems.map((item) => (
@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
 
           {/* Bloco 3 — Contato + Legal */}
-          <div className="space-y-8 max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
+          <div className="footer-mobile-panel space-y-8 max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             {/* Contato */}
             <div>
               <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Contato</h4>
@@ -145,7 +145,7 @@ const Footer = () => {
           </div>
 
           {/* Bloco 4 — Localização */}
-          <div className="max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
+          <div className="footer-mobile-panel max-w-[22rem] mx-auto sm:max-w-none sm:mx-0">
             <h4 className="font-accent text-[#FFB964] text-xl mb-5 tracking-wide">Localização</h4>
             <div className="rounded-lg overflow-hidden border border-[#FFB964]/20 shadow-md">
               <iframe
