@@ -5,8 +5,22 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  build: {
+export default defineConfig(({ mode }) => {
+  const isDev = mode === "development";
+
+  const devPreviewCompatibility = isDev
+    ? {
+        name: "lovable-preview-compat",
+        transformIndexHtml(html: string) {
+          return html
+            .replace(/frame-ancestors 'self';\s*/i, "")
+            .replace(/<meta\s+http-equiv="X-Frame-Options"[^>]*>\s*/i, "");
+        },
+      }
+    : null;
+
+  return {
+    build: {
     sourcemap: mode === "development",
     cssCodeSplit: true,
     target: "es2020",
@@ -21,26 +35,41 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  server: {
-    host: "::",
-    port: 8080,
-    hmr: {
-      overlay: false,
+    server: {
+      host: "0.0.0.0",
+      port: 8080,
+      strictPort: true,
+      hmr: {
+        overlay: false,
+      },
+      headers: {
+        "X-Content-Type-Options": "nosniff",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "geolocation=(), microphone=(), camera=()",
+        ...(isDev
+          ? {}
+          : {
+              "X-Frame-Options": "SAMEORIGIN",
+              "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+            }),
+      },
     },
-    headers: {
-      "X-Content-Type-Options": "nosniff",
-      "X-Frame-Options": "SAMEORIGIN",
-      "X-XSS-Protection": "1; mode=block",
-      "Referrer-Policy": "strict-origin-when-cross-origin",
-      "Permissions-Policy": "geolocation=(), microphone=(), camera=()",
-      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    plugins: [react(), isDev && componentTagger(), devPreviewCompatibility].filter(
+      Boolean
+    ),
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+      dedupe: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "@tanstack/react-query",
+        "@tanstack/query-core",
+      ],
     },
-  },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
-  },
-}));
+  };
+});

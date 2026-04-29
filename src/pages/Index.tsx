@@ -8,31 +8,22 @@ import CasesSection from "@/components/CasesSection";
 import ContatoSection from "@/components/ContatoSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SectionDivider from "@/components/SectionDivider";
 
 const Index = () => {
   return (
     <>
       <Header />
       <HeroSection />
-      <div className="h-24 relative" style={{ backgroundColor: '#66141B' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#E6E5E4' }} />
-      </div>
+      <SectionDivider fromColor="#66141B" toColor="#E6E5E4" className="h-24 md:h-28" />
       <QuemSomosSection />
-      <div className="h-16 relative" style={{ backgroundColor: '#E6E5E4' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#66141B' }} />
-      </div>
+      <SectionDivider fromColor="#E6E5E4" toColor="#66141B" className="h-16 md:h-20" />
       <MVVSection />
-      <div className="h-16 relative" style={{ backgroundColor: '#66141B' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#E6E5E4' }} />
-      </div>
+      <SectionDivider fromColor="#66141B" toColor="#E6E5E4" className="h-16 md:h-20" />
       <ServicosSection />
-      <div className="h-16 relative" style={{ backgroundColor: '#E6E5E4' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#66141B' }} />
-      </div>
+      <SectionDivider fromColor="#E6E5E4" toColor="#66141B" className="h-16 md:h-20" />
       <CasesSection />
-      <div className="h-16 relative" style={{ backgroundColor: '#66141B' }}>
-        <div className="absolute inset-0" style={{ clipPath: 'polygon(0 100%, 100% 0, 100% 100%, 0 100%)', backgroundColor: '#E6E5E4' }} />
-      </div>
+      <SectionDivider fromColor="#66141B" toColor="#E6E5E4" className="h-16 md:h-20" />
       <ContatoSection />
       <Footer />
       <WhatsAppButton />
