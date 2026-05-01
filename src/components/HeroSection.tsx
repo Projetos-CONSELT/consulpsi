@@ -79,17 +79,19 @@ const HeroSection = () => {
             </motion.p>
 
             {/* Botão CTA refinado */}
-            <motion.button
-              onClick={() => handleScrollTo("#quem-somos")}
-              className="inline-flex items-center justify-center w-full sm:w-auto bg-[#FFB964] text-accent-foreground font-semibold font-body px-9 py-3.5 rounded-xl text-sm tracking-wide transition-all duration-300 ease-out shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_rgba(255,185,100,0.35)] hover:bg-[#FFB964]/90 active:scale-95"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-            >
-              Saiba Mais
-            </motion.button>
+            <div className="flex justify-center md:justify-start">
+              <motion.button
+                onClick={() => handleScrollTo("#quem-somos")}
+                className="inline-flex items-center justify-center w-auto bg-[#FFB964] text-accent-foreground font-semibold font-body px-10 py-4 rounded-xl text-[15px] sm:px-9 sm:py-3.5 sm:text-sm tracking-wide transition-all duration-300 ease-out shadow-[0_4px_14px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_rgba(255,185,100,0.35)] hover:bg-[#FFB964]/90 active:scale-95"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                Saiba Mais
+              </motion.button>
+            </div>
           </motion.div>
 
           {/* Logo com glow sutil */}
