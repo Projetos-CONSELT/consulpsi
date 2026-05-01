@@ -76,20 +76,20 @@ const CasesSection = () => {
           </AnimatePresence>
 
           <div className="flex items-center justify-center gap-4 mt-8">
-            <button onClick={prev} className="bg-card/20 hover:bg-card/40 rounded-full p-2 text-primary-foreground transition-colors" aria-label="Anterior">
+            <button onClick={handlePrev} className="bg-card/20 hover:bg-card/40 rounded-full p-2 text-primary-foreground transition-colors" aria-label="Anterior">
               <ChevronLeft size={24} />
             </button>
             <div className="flex gap-2">
               {testimonials.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setCurrent(i)}
+                  onClick={() => handleDot(i)}
                   className={`w-3 h-3 rounded-full transition-colors ${i === current ? "bg-[#FFB964]" : "bg-card/30"}`}
                   aria-label={`Depoimento ${i + 1}`}
                 />
               ))}
             </div>
-            <button onClick={next} className="bg-card/20 hover:bg-card/40 rounded-full p-2 text-primary-foreground transition-colors" aria-label="Próximo">
+            <button onClick={handleNext} className="bg-card/20 hover:bg-card/40 rounded-full p-2 text-primary-foreground transition-colors" aria-label="Próximo">
               <ChevronRight size={24} />
             </button>
           </div>
