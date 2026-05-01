@@ -142,22 +142,32 @@ const ContatoSection = () => {
             </p>
 
             <div className="space-y-4">
-              <a
-                href="mailto:consulpsi@ufu.br"
-                className="group flex items-center gap-4"
-                aria-label="Enviar e-mail para consulpsi@ufu.br"
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText("consulpsi@ufu.br");
+                  toast.success("E-mail copiado!");
+                }}
+                className="group flex items-center gap-4 cursor-pointer"
+                aria-label="Copiar e-mail consulpsi@ufu.br"
               >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Mail className="text-primary" size={18} />
                 </div>
                 <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">consulpsi@ufu.br</span>
-              </a>
-              <div className="group flex items-center gap-4">
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText("(34) 99999-0000");
+                  toast.success("Telefone copiado!");
+                }}
+                className="group flex items-center gap-4 cursor-pointer"
+                aria-label="Copiar telefone (34) 99999-0000"
+              >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Phone className="text-primary" size={18} />
                 </div>
                 <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">(34) 99999-0000</span>
-              </div>
+              </button>
               <a
                 href="https://www.google.com/maps/search/?api=1&query=Bloco+2E+-+Agronomia+UFU"
                 target="_blank"
