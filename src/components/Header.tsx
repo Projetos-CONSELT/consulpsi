@@ -23,15 +23,24 @@ const Header = () => {
   }, []);
 
   const handleClick = useCallback((href: string) => {
+    const wasMobileOpen = mobileOpen;
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      const header = document.querySelector("header");
-      const headerHeight = header?.getBoundingClientRect().height ?? 80;
-      const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
-      window.scrollTo({ top, behavior: "smooth" });
+    const scrollToSection = () => {
+      const el = document.querySelector(href);
+      if (el) {
+        const header = document.querySelector("header");
+        const headerHeight = header?.getBoundingClientRect().height ?? 80;
+        const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    };
+    if (wasMobileOpen) {
+      // Wait for mobile menu to close and header to shrink before calculating offset
+      requestAnimationFrame(() => requestAnimationFrame(scrollToSection));
+    } else {
+      scrollToSection();
     }
-  }, []);
+  }, [mobileOpen]);
 
   return (
     <header
