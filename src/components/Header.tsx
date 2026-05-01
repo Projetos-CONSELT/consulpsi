@@ -24,7 +24,13 @@ const Header = () => {
 
   const handleClick = useCallback((href: string) => {
     setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    const el = document.querySelector(href);
+    if (el) {
+      const header = document.querySelector("header");
+      const headerHeight = header?.getBoundingClientRect().height ?? 80;
+      const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
   }, []);
 
   return (
