@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
@@ -27,14 +27,21 @@ const testimonials = [
 
 const CasesSection = () => {
   const [current, setCurrent] = useState(0);
+  const resetKey = useRef(0);
 
   const next = useCallback(() => setCurrent((p) => (p + 1) % testimonials.length), []);
   const prev = () => setCurrent((p) => (p - 1 + testimonials.length) % testimonials.length);
 
+  const resetTimer = useCallback(() => { resetKey.current += 1; }, []);
+
+  const handlePrev = () => { prev(); resetTimer(); };
+  const handleNext = () => { next(); resetTimer(); };
+  const handleDot = (i: number) => { setCurrent(i); resetTimer(); };
+
   useEffect(() => {
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, resetKey.current]);
 
   return (
     <section id="cases" className="py-20 bg-primary">
