@@ -67,7 +67,7 @@ const ContatoSection = () => {
 
       setIsSubmitting(true);
 
-      const response = await fetch("https://formsubmit.co/ajax/contato@consulpsi.com.br", {
+      const response = await fetch("https://formsubmit.co/ajax/vendasconsulpsi@gmail.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,31 +142,28 @@ const ContatoSection = () => {
             </p>
 
             <div className="space-y-4">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText("consulpsi@ufu.br");
-                  toast.success("E-mail copiado!");
-                }}
+              <a
+                href="mailto:vendasconsulpsi@gmail.com"
                 className="group flex items-center gap-4 cursor-pointer"
-                aria-label="Copiar e-mail consulpsi@ufu.br"
+                aria-label="Enviar e-mail para vendasconsulpsi@gmail.com"
               >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Mail className="text-primary" size={18} />
                 </div>
-                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">consulpsi@ufu.br</span>
-              </button>
+                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">vendasconsulpsi@gmail.com</span>
+              </a>
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText("(34) 99999-0000");
+                  navigator.clipboard.writeText("(34) 98837-8444");
                   toast.success("Telefone copiado!");
                 }}
                 className="group flex items-center gap-4 cursor-pointer"
-                aria-label="Copiar telefone (34) 99999-0000"
+                aria-label="Copiar telefone (34) 98837-8444"
               >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Phone className="text-primary" size={18} />
                 </div>
-                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">(34) 99999-0000</span>
+                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">(34) 98837-8444</span>
               </button>
               <a
                 href="https://www.google.com/maps/search/?api=1&query=Bloco+2E+-+Agronomia+UFU"

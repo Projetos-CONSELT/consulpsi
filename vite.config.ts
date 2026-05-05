@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import compression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -21,20 +22,26 @@ export default defineConfig(({ mode }) => {
 
   return {
     build: {
-    sourcemap: mode === "development",
-    cssCodeSplit: true,
-    target: "es2020",
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          "vendor-react": ["react", "react-dom", "react-router-dom"],
-          "vendor-query": ["@tanstack/react-query"],
-          "vendor-motion": ["framer-motion"],
-          "vendor-lucide": ["lucide-react"],
+      sourcemap: mode === "development",
+      cssCodeSplit: true,
+      target: "es2020",
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          drop_console: !isDev,
+        },
+      },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            "vendor-react": ["react", "react-dom", "react-router-dom"],
+            "vendor-query": ["@tanstack/react-query"],
+            "vendor-motion": ["framer-motion"],
+            "vendor-lucide": ["lucide-react"],
+          },
         },
       },
     },
-  },
     server: {
       host: "0.0.0.0",
       port: 8080,
@@ -55,9 +62,19 @@ export default defineConfig(({ mode }) => {
             }),
       },
     },
-    plugins: [react(), isDev && componentTagger(), devPreviewCompatibility].filter(
-      Boolean
-    ),
+    plugins: [
+      react(),
+      isDev && componentTagger(),
+      devPreviewCompatibility,
+      !isDev && compression({
+        algorithm: 'brotli',
+        ext: '.br',
+      }),
+      !isDev && compression({
+        algorithm: 'gzip',
+        ext: '.gz',
+      }),
+    ].filter(Boolean),
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/logo-consulpsi-hero.png";
 
 const servicosItems = [
-  "Recrutamento e Seleção",
-  "Saúde Mental no Trabalho",
-  "Avaliação de Desempenho",
-  "Pesquisa de Clima",
-  "Treinamento e Desenvolvimento",
+  "Processo Seletivo",
+  "Pesquisa de Satisfação",
+  "Treinamento, Desenvolvimento e Capacitação (TD&E)",
+  "Monitoria de Currículo",
+  "Gestão de Desempenho",
   "Consultoria em RH",
 ];
 
@@ -61,11 +61,11 @@ const Footer = () => {
               <ul className="space-y-2.5 text-sm font-body text-primary-foreground/70 mb-5">
                 <li>
                   <a
-                    href="mailto:contato@consulpsiconsultoria.com.br"
+                    href="mailto:vendasconsulpsi@gmail.com"
                     className="inline-block relative transition-all duration-300 hover:text-[#FFB964] hover:translate-x-1 after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-px after:bg-[#FFB964]/50 after:transition-all after:duration-300"
                   >
-                    <span className="block">contato@consulpsi</span>
-                    <span className="block">consultoria.com.br</span>
+                    <span className="block">vendasconsulpsi</span>
+                    <span className="block">@gmail.com</span>
                   </a>
                 </li>
                 <li>
@@ -107,7 +107,7 @@ const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/5534999999999"
+                  href="https://wa.me/5534988378444"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"

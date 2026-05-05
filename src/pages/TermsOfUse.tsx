@@ -151,8 +151,8 @@ Qualquer disputa será submetida aos tribunais competentes de Uberlândia, Minas
       title: "15. Contato",
       content: `Para perguntas sobre estas Condições de Uso, entre em contato:
 
-📧 Email: legal@consulpsi.com.br
-📞 Telefone: (34) 99999-0000
+📧 Email: vendasconsulpsi@gmail.com
+📞 Telefone: (34) 98837-8444
 📍 Endereço: Bloco 2E121 — Campus Umuarama, Universidade Federal de Uberlândia`,
     },
   ];

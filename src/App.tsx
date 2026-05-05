@@ -6,6 +6,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { initializeSecurity } from "@/lib/security";
+import CookieConsent from "@/components/CookieConsent";
 const Index = lazy(() => import("./pages/Index.tsx"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.tsx"));
 const TermsOfUse = lazy(() => import("./pages/TermsOfUse.tsx"));
@@ -45,6 +46,7 @@ const App = () => {
           </BrowserRouter>
         </Suspense>
       </TooltipProvider>
+      <CookieConsent />
     </QueryClientProvider>
   );
 };

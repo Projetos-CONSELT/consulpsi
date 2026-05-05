@@ -124,8 +124,8 @@ Após esse período, os dados são eliminados de forma segura.`,
       title: "12. Contato",
       content: `Se você tiver dúvidas, preocupações ou desejar exercer seus direitos, entre em contato conosco:
 
-📧 Email: privacidade@consulpsi.com.br
-📞 Telefone: (34) 99999-0000
+📧 Email: vendasconsulpsi@gmail.com
+📞 Telefone: (34) 98837-8444
 📍 Endereço: Bloco 2E121 — Campus Umuarama, Universidade Federal de Uberlândia`,
     },
   ];

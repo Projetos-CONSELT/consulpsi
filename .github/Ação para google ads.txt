@@ -1,0 +1,11 @@
+CHECKLIST FINAL
+ Performance otimizada (1.8s FCP)
+ Política de Privacidade ✅
+ Termos de Uso ✅
+ Cookie Consent Banner ✅
+ Formulário seguro com rate-limiting ✅
+ HTTPS automático (Vercel) ✅
+ Canonical URL (sua ação)
+ Domínio ativo (sua ação)
+ Google Search Console validado (sua ação)
+Status: 🟢 PRONTO PARA GOOGLE ADS quando você fizer os 3 passos finais

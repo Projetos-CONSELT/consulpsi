@@ -1,27 +1,31 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const testimonials = [
   {
     name: "Maria Silva",
     role: "Gestora de RH — Empresa X",
     text: "A Consulpsi trouxe uma abordagem inovadora para nosso processo seletivo. Os resultados foram excelentes e a equipe demonstrou total profissionalismo.",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria",
   },
   {
     name: "João Oliveira",
     role: "Diretor — Startup Y",
     text: "O trabalho de pesquisa de clima organizacional nos deu insights valiosos. Conseguimos melhorar significativamente o engajamento da equipe.",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Joao",
   },
   {
     name: "Ana Costa",
     role: "Coordenadora de Pessoas — Empresa Z",
     text: "Os treinamentos desenvolvidos pela Consulpsi foram transformadores. A equipe se sentiu valorizada e o desempenho melhorou consideravelmente.",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana",
   },
   {
     name: "Carlos Mendes",
     role: "CEO — Empresa W",
     text: "Excelente consultoria! A Consulpsi entendeu perfeitamente nossas necessidades e entregou um projeto de RH completo e bem estruturado.",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos",
   },
 ];
 
@@ -66,7 +70,13 @@ const CasesSection = () => {
               transition={{ duration: 0.4 }}
               className="bg-card rounded-2xl p-8 md:p-12 shadow-xl text-center"
             >
-              <Quote className="text-[#FFB964] mx-auto mb-6" size={40} />
+              <div className="mb-6 flex justify-center">
+                <img
+                  src={testimonials[current].image}
+                  alt={testimonials[current].name}
+                  className="w-20 h-20 rounded-full border-4 border-[#FFB964] shadow-md"
+                />
+              </div>
               <p className="text-foreground text-lg md:text-xl italic leading-relaxed mb-8 font-body">
                 "{testimonials[current].text}"
               </p>
