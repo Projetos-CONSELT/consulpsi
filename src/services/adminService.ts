@@ -1,12 +1,16 @@
 /**
- * Serviço de Gerenciamento do Painel Administrativo da Consulpsi
- * Suporta persistência reativa local e integração direta com PostgreSQL/Supabase
+ * Serviço de Gerenciamento e Segurança do Painel Administrativo da Consulpsi
+ * Inclui:
+ * - Hashing criptográfico SHA-256 com Salt
+ * - Proteção contra ataques de força bruta com bloqueio temporal (Lockout)
+ * - Sessões com expiração automática (2 horas)
+ * - Sanitização de entradas contra XSS e injeção
  */
 
 export interface SiteSettings {
-  quemSomosImage: string; // URL ou base64
-  whatsappNumber: string; // formato 5534988378444
-  whatsappDisplay: string; // formato (34) 98837-8444
+  quemSomosImage: string;
+  whatsappNumber: string;
+  whatsappDisplay: string;
   whatsappMessage: string;
   contactEmail: string;
 }
@@ -28,7 +32,7 @@ export interface FormSubmission {
   name: string;
   email: string;
   message: string;
-  status: 'unread' | 'read' | 'answered' | 'archived';
+  status: "unread" | "read" | "answered" | "archived";
   notes?: string;
   createdAt: string;
 }
@@ -38,6 +42,7 @@ export interface AdminAuthSession {
   userEmail: string;
   token: string;
   loginTime: string;
+  expiresAt: number; // Timestamp em ms (2 horas de validade)
 }
 
 const STORAGE_KEYS = {
@@ -45,8 +50,36 @@ const STORAGE_KEYS = {
   CASES: "consulpsi_cases_sucesso",
   SUBMISSIONS: "consulpsi_form_submissions",
   AUTH: "consulpsi_admin_auth",
-  PASSWORD_HASH: "consulpsi_admin_pwd",
+  PASSWORD_HASH: "consulpsi_admin_pwd_hash",
+  FAILED_ATTEMPTS: "consulpsi_failed_attempts",
+  LOCKOUT_UNTIL: "consulpsi_lockout_until",
 };
+
+// Salt fixo da aplicação para hashing de senha
+const SALT = "consulpsi_security_salt_2026_@!";
+const DEFAULT_PASS_PLAIN = "admin123";
+const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2 horas
+const MAX_FAILED_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutos de bloqueio
+
+// Função utilitária de hash SHA-256
+export async function hashPassword(plainText: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plainText + SALT);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Sanitização básica de strings
+function sanitize(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/[<>]/g, "") // remove < e >
+    .replace(/javascript:/gi, "")
+    .replace(/data:text\/html/gi, "")
+    .trim();
+}
 
 // Dados padrão iniciais
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -70,7 +103,6 @@ const DEFAULT_CASES: CaseItem[] = [
   },
 ];
 
-// Disparador de eventos para atualização reativa instantânea
 const notifyChange = (eventName: string, data?: unknown) => {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(eventName, { detail: data }));
@@ -79,22 +111,84 @@ const notifyChange = (eventName: string, data?: unknown) => {
 
 export const adminService = {
   // ==========================================
-  // AUTENTICAÇÃO
+  // AUTENTICAÇÃO COM HASH & PROTEÇÃO DE BRUTE FORCE
   // ==========================================
-  login(password: string, email = "admin@consulpsi.com.br"): boolean {
-    const savedPassword = localStorage.getItem(STORAGE_KEYS.PASSWORD_HASH) || "admin123";
-    if (password === savedPassword) {
+  async getStoredPasswordHash(): Promise<string> {
+    const saved = localStorage.getItem(STORAGE_KEYS.PASSWORD_HASH);
+    if (saved) return saved;
+    // Se ainda não houver hash salvo, inicializa com o hash de admin123
+    const initialHash = await hashPassword(DEFAULT_PASS_PLAIN);
+    localStorage.setItem(STORAGE_KEYS.PASSWORD_HASH, initialHash);
+    return initialHash;
+  },
+
+  getLockoutStatus(): { isLocked: boolean; remainingSeconds: number } {
+    const lockoutUntilStr = localStorage.getItem(STORAGE_KEYS.LOCKOUT_UNTIL);
+    if (!lockoutUntilStr) return { isLocked: false, remainingSeconds: 0 };
+
+    const lockoutUntil = parseInt(lockoutUntilStr, 10);
+    const now = Date.now();
+    if (now < lockoutUntil) {
+      return {
+        isLocked: true,
+        remainingSeconds: Math.ceil((lockoutUntil - now) / 1000),
+      };
+    }
+    // Lockout expirou
+    localStorage.removeItem(STORAGE_KEYS.LOCKOUT_UNTIL);
+    localStorage.removeItem(STORAGE_KEYS.FAILED_ATTEMPTS);
+    return { isLocked: false, remainingSeconds: 0 };
+  },
+
+  async login(password: string, email = "admin@consulpsi.com.br"): Promise<{ success: boolean; message: string }> {
+    // 1. Verificar se está bloqueado por força bruta
+    const lockout = this.getLockoutStatus();
+    if (lockout.isLocked) {
+      return {
+        success: false,
+        message: `Muitas tentativas incorretas. Sistema bloqueado por segurança. Tente novamente em ${lockout.remainingSeconds} segundo(s).`,
+      };
+    }
+
+    const currentHash = await this.getStoredPasswordHash();
+    const inputHash = await hashPassword(password);
+
+    if (inputHash === currentHash) {
+      // Sucesso: limpar tentativas falhas
+      localStorage.removeItem(STORAGE_KEYS.FAILED_ATTEMPTS);
+      localStorage.removeItem(STORAGE_KEYS.LOCKOUT_UNTIL);
+
+      const now = Date.now();
       const session: AdminAuthSession = {
         isAuthenticated: true,
-        userEmail: email,
-        token: `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-        loginTime: new Date().toISOString(),
+        userEmail: sanitize(email),
+        token: `token_${now}_${Math.random().toString(36).substring(2, 12)}`,
+        loginTime: new Date(now).toISOString(),
+        expiresAt: now + SESSION_DURATION_MS,
       };
       localStorage.setItem(STORAGE_KEYS.AUTH, JSON.stringify(session));
       notifyChange("consulpsi-auth-changed", session);
-      return true;
+      return { success: true, message: "Login realizado com sucesso!" };
     }
-    return false;
+
+    // Falha: registrar tentativa
+    const attempts = parseInt(localStorage.getItem(STORAGE_KEYS.FAILED_ATTEMPTS) || "0", 10) + 1;
+    localStorage.setItem(STORAGE_KEYS.FAILED_ATTEMPTS, attempts.toString());
+
+    if (attempts >= MAX_FAILED_ATTEMPTS) {
+      const lockoutUntil = Date.now() + LOCKOUT_DURATION_MS;
+      localStorage.setItem(STORAGE_KEYS.LOCKOUT_UNTIL, lockoutUntil.toString());
+      return {
+        success: false,
+        message: `Limite de 5 tentativas excedido. O painel foi bloqueado temporariamente por 5 minutos por segurança.`,
+      };
+    }
+
+    const remaining = MAX_FAILED_ATTEMPTS - attempts;
+    return {
+      success: false,
+      message: `Senha incorreta. Você tem mais ${remaining} tentativa(s) antes do bloqueio temporário.`,
+    };
   },
 
   logout(): void {
@@ -107,26 +201,38 @@ export const adminService = {
       const sessionStr = localStorage.getItem(STORAGE_KEYS.AUTH);
       if (!sessionStr) return null;
       const session = JSON.parse(sessionStr) as AdminAuthSession;
+
+      // Verificar expiração da sessão
+      if (!session.expiresAt || Date.now() > session.expiresAt) {
+        this.logout();
+        return null;
+      }
+
       return session.isAuthenticated ? session : null;
     } catch {
       return null;
     }
   },
 
-  changePassword(currentPass: string, newPass: string): { success: boolean; message: string } {
-    const savedPassword = localStorage.getItem(STORAGE_KEYS.PASSWORD_HASH) || "admin123";
-    if (currentPass !== savedPassword) {
+  async changePassword(currentPass: string, newPass: string): Promise<{ success: boolean; message: string }> {
+    const currentHash = await this.getStoredPasswordHash();
+    const inputCurrentHash = await hashPassword(currentPass);
+
+    if (inputCurrentHash !== currentHash) {
       return { success: false, message: "Senha atual incorreta." };
     }
+
     if (!newPass || newPass.length < 6) {
       return { success: false, message: "A nova senha deve ter pelo menos 6 caracteres." };
     }
-    localStorage.setItem(STORAGE_KEYS.PASSWORD_HASH, newPass);
-    return { success: true, message: "Senha alterada com sucesso!" };
+
+    const newHash = await hashPassword(newPass);
+    localStorage.setItem(STORAGE_KEYS.PASSWORD_HASH, newHash);
+    return { success: true, message: "Senha alterada com sucesso e protegida com criptografia!" };
   },
 
   // ==========================================
-  // CONFIGURAÇÕES GLOBAIS (Imagem Seção 2 & WhatsApp)
+  // CONFIGURAÇÕES GLOBAIS
   // ==========================================
   getSettings(): SiteSettings {
     try {
@@ -140,7 +246,15 @@ export const adminService = {
 
   updateSettings(partial: Partial<SiteSettings>): SiteSettings {
     const current = this.getSettings();
-    const updated = { ...current, ...partial };
+    const cleanPartial: Partial<SiteSettings> = {};
+
+    if (partial.quemSomosImage !== undefined) cleanPartial.quemSomosImage = partial.quemSomosImage;
+    if (partial.whatsappNumber !== undefined) cleanPartial.whatsappNumber = partial.whatsappNumber.replace(/\D/g, "");
+    if (partial.whatsappDisplay !== undefined) cleanPartial.whatsappDisplay = sanitize(partial.whatsappDisplay);
+    if (partial.whatsappMessage !== undefined) cleanPartial.whatsappMessage = sanitize(partial.whatsappMessage);
+    if (partial.contactEmail !== undefined) cleanPartial.contactEmail = sanitize(partial.contactEmail);
+
+    const updated = { ...current, ...cleanPartial };
     localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(updated));
     notifyChange("consulpsi-settings-changed", updated);
     return updated;
@@ -174,10 +288,14 @@ export const adminService = {
   addCase(data: Omit<CaseItem, "id" | "createdAt">): CaseItem {
     const list = this.getCases();
     const newCase: CaseItem = {
-      ...data,
+      name: sanitize(data.name),
+      role: sanitize(data.role),
+      text: sanitize(data.text),
+      imageUrl: data.imageUrl,
+      orderIndex: list.length,
+      active: data.active,
       id: `case_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
       createdAt: new Date().toISOString(),
-      orderIndex: list.length,
     };
     list.push(newCase);
     localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(list));
@@ -190,9 +308,15 @@ export const adminService = {
     const index = list.findIndex((c) => c.id === id);
     if (index === -1) return null;
 
+    const current = list[index];
     list[index] = {
-      ...list[index],
-      ...partial,
+      ...current,
+      name: partial.name !== undefined ? sanitize(partial.name) : current.name,
+      role: partial.role !== undefined ? sanitize(partial.role) : current.role,
+      text: partial.text !== undefined ? sanitize(partial.text) : current.text,
+      imageUrl: partial.imageUrl !== undefined ? partial.imageUrl : current.imageUrl,
+      active: partial.active !== undefined ? partial.active : current.active,
+      orderIndex: partial.orderIndex !== undefined ? partial.orderIndex : current.orderIndex,
       updatedAt: new Date().toISOString(),
     };
 
@@ -206,15 +330,6 @@ export const adminService = {
     localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(list));
     notifyChange("consulpsi-cases-changed", list);
     return true;
-  },
-
-  reorderCases(newOrderedList: CaseItem[]): void {
-    const indexed = newOrderedList.map((item, idx) => ({
-      ...item,
-      orderIndex: idx,
-    }));
-    localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(indexed));
-    notifyChange("consulpsi-cases-changed", indexed);
   },
 
   // ==========================================
@@ -235,9 +350,9 @@ export const adminService = {
     const list = this.getFormSubmissions();
     const newSubmission: FormSubmission = {
       id: `lead_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-      name: data.name,
-      email: data.email,
-      message: data.message,
+      name: sanitize(data.name),
+      email: sanitize(data.email),
+      message: sanitize(data.message),
       status: "unread",
       createdAt: new Date().toISOString(),
     };
@@ -252,7 +367,7 @@ export const adminService = {
     const item = list.find((s) => s.id === id);
     if (!item) return false;
     item.status = status;
-    if (notes !== undefined) item.notes = notes;
+    if (notes !== undefined) item.notes = sanitize(notes);
     localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(list));
     notifyChange("consulpsi-submissions-changed", list);
     return true;
@@ -263,10 +378,5 @@ export const adminService = {
     localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify(list));
     notifyChange("consulpsi-submissions-changed", list);
     return true;
-  },
-
-  clearAllSubmissions(): void {
-    localStorage.setItem(STORAGE_KEYS.SUBMISSIONS, JSON.stringify([]));
-    notifyChange("consulpsi-submissions-changed", []);
   },
 };

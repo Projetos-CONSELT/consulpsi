@@ -18,8 +18,7 @@ import {
   Inbox,
   Database,
   KeyRound,
-  ShieldCheck,
-  CheckCircle2,
+  ShieldAlert,
   Copy,
   Sparkles,
 } from "lucide-react";
@@ -34,6 +33,7 @@ const AdminPanel = () => {
   const [loginPassword, setLoginPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [lockoutSecs, setLockoutSecs] = useState<number>(() => adminService.getLockoutStatus().remainingSeconds);
 
   // Change Password Modal
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -52,6 +52,50 @@ const AdminPanel = () => {
     setSubmissions(adminService.getFormSubmissions());
   };
 
+  // 1. Injeção de Meta Tag "noindex, nofollow" para impedir qualquer indexação no Google / Robôs
+  useEffect(() => {
+    // Definir título discreto
+    const prevTitle = document.title;
+    document.title = "Consulpsi | Painel";
+
+    // Criar/atualizar meta robots
+    let robotsMeta = document.querySelector("meta[name='robots']") as HTMLMetaElement | null;
+    let created = false;
+    const previousRobotsContent = robotsMeta?.getAttribute("content") || "index, follow";
+
+    if (!robotsMeta) {
+      robotsMeta = document.createElement("meta");
+      robotsMeta.name = "robots";
+      document.head.appendChild(robotsMeta);
+      created = true;
+    }
+    robotsMeta.content = "noindex, nofollow, noarchive, nosnippet, noimageindex";
+
+    return () => {
+      document.title = prevTitle;
+      if (robotsMeta) {
+        if (created) {
+          document.head.removeChild(robotsMeta);
+        } else {
+          robotsMeta.content = previousRobotsContent;
+        }
+      }
+    };
+  }, []);
+
+  // 2. Timer de Lockout (se bloqueado por tentativas de força bruta)
+  useEffect(() => {
+    if (lockoutSecs <= 0) return;
+    const interval = setInterval(() => {
+      const status = adminService.getLockoutStatus();
+      setLockoutSecs(status.remainingSeconds);
+      if (status.remainingSeconds <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [lockoutSecs]);
+
   useEffect(() => {
     const handleAuth = (e: Event) => {
       const customEvent = e as CustomEvent<AdminAuthSession | null>;
@@ -61,19 +105,32 @@ const AdminPanel = () => {
     return () => window.removeEventListener("consulpsi-auth-changed", handleAuth);
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (lockoutSecs > 0) {
+      toast.error(`Aguarde ${lockoutSecs}s para tentar novamente.`);
+      return;
+    }
+
     setIsLoggingIn(true);
-    setTimeout(() => {
-      const success = adminService.login(loginPassword, loginEmail);
+    try {
+      const res = await adminService.login(loginPassword, loginEmail);
       setIsLoggingIn(false);
-      if (success) {
-        toast.success("Login realizado com sucesso!");
+      if (res.success) {
+        toast.success(res.message);
+        setLoginPassword("");
         refreshData();
       } else {
-        toast.error("Senha incorreta. A senha padrão inicial é admin123");
+        toast.error(res.message);
+        const lock = adminService.getLockoutStatus();
+        if (lock.isLocked) {
+          setLockoutSecs(lock.remainingSeconds);
+        }
       }
-    }, 400);
+    } catch {
+      setIsLoggingIn(false);
+      toast.error("Ocorreu um erro ao processar a autenticação.");
+    }
   };
 
   const handleLogout = () => {
@@ -81,13 +138,13 @@ const AdminPanel = () => {
     toast.info("Você saiu do painel administrativo.");
   };
 
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       toast.error("As novas senhas digitadas não coincidem.");
       return;
     }
-    const res = adminService.changePassword(currentPassword, newPassword);
+    const res = await adminService.changePassword(currentPassword, newPassword);
     if (res.success) {
       toast.success(res.message);
       setIsPasswordModalOpen(false);
@@ -149,9 +206,9 @@ CREATE TABLE IF NOT EXISTS form_submissions (
             <Link to="/" className="inline-block transition-transform hover:scale-105">
               <img src={logoHeader} alt="Consulpsi" className="h-16 mx-auto mb-3" />
             </Link>
-            <h1 className="text-2xl font-bold text-white tracking-wide">Painel Administrativo</h1>
+            <h1 className="text-2xl font-bold text-white tracking-wide">Área Restrita</h1>
             <p className="text-[#FFB964] text-xs font-accent tracking-wider uppercase mt-1">
-              Acesso Restrito da Equipe
+              Consulpsi Consultoria
             </p>
           </div>
 
@@ -161,10 +218,20 @@ CREATE TABLE IF NOT EXISTS form_submissions (
                 <Lock size={20} />
               </div>
               <div>
-                <h2 className="text-base font-bold text-gray-900">Entrar no Sistema</h2>
-                <p className="text-xs text-gray-500">Digite suas credenciais de administrador</p>
+                <h2 className="text-base font-bold text-gray-900">Autenticação Administrativa</h2>
+                <p className="text-xs text-gray-500">Acesso exclusivo e protegido</p>
               </div>
             </div>
+
+            {lockoutSecs > 0 && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800 flex items-start gap-2.5">
+                <ShieldAlert className="text-red-600 shrink-0 mt-0.5" size={16} />
+                <div>
+                  <strong className="block font-bold">Acesso Bloqueado Temporariamente</strong>
+                  Muitas tentativas erradas. Aguarde <strong className="font-mono">{lockoutSecs}s</strong> para tentar novamente.
+                </div>
+              </div>
+            )}
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
@@ -174,9 +241,10 @@ CREATE TABLE IF NOT EXISTS form_submissions (
                 <input
                   type="email"
                   required
+                  disabled={lockoutSecs > 0}
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none"
+                  className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none disabled:opacity-50"
                   placeholder="admin@consulpsi.com.br"
                 />
               </div>
@@ -189,9 +257,10 @@ CREATE TABLE IF NOT EXISTS form_submissions (
                   <input
                     type={showPassword ? "text" : "password"}
                     required
+                    disabled={lockoutSecs > 0}
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-10"
+                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-10 disabled:opacity-50"
                     placeholder="••••••••"
                   />
                   <button
@@ -207,14 +276,14 @@ CREATE TABLE IF NOT EXISTS form_submissions (
               <div className="p-3 bg-amber-50 rounded-lg border border-amber-200/60 text-xs text-amber-800 flex items-start gap-2">
                 <Sparkles size={14} className="text-amber-600 mt-0.5 shrink-0" />
                 <span>
-                  Senha padrão inicial: <strong className="font-mono font-bold">admin123</strong> (você pode alterá-la após entrar).
+                  Senha padrão inicial: <strong className="font-mono font-bold">admin123</strong> (protegida com criptografia SHA-256).
                 </span>
               </div>
 
               <button
                 type="submit"
-                disabled={isLoggingIn}
-                className="w-full py-3 bg-[#621816] hover:bg-[#7C1D1D] text-white font-semibold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70"
+                disabled={isLoggingIn || lockoutSecs > 0}
+                className="w-full py-3 bg-[#621816] hover:bg-[#7C1D1D] text-white font-semibold rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoggingIn ? "Autenticando..." : "Entrar no Painel"}
               </button>

@@ -1,35 +1,58 @@
 # Robots.txt para Consulpsi — Consultoria em Psicologia Organizacional e RH
-# Otimizado para indexação em buscadores
+# Otimizado para indexação em buscadores públicos e bloqueio total de áreas restritas
 
 User-agent: *
 Allow: /
+Allow: /privacy-policy
+Allow: /terms
+Disallow: /adminpainel
+Disallow: /adminpainel/
+Disallow: /admin
 Disallow: /admin/
 Disallow: /private/
+Disallow: /api/
 Crawl-delay: 1
 
-# Google Bot — Prioridade alta
+# Google Bot — Prioridade alta apenas para páginas públicas
 User-agent: Googlebot
 Allow: /
-Priority: 1.0
+Allow: /privacy-policy
+Allow: /terms
+Disallow: /adminpainel
+Disallow: /adminpainel/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /private/
 
 # Bing Bot
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 1
+Allow: /privacy-policy
+Allow: /terms
+Disallow: /adminpainel
+Disallow: /adminpainel/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /private/
 
-# Twitter Bot
-User-agent: Twitterbot
-Allow: /
+# Yahoo / Slurp
+User-agent: Slurp
+Disallow: /adminpainel
+Disallow: /adminpainel/
 
-# Facebook External Hit
-User-agent: facebookexternalhit
-Allow: /
+# DuckDuckBot
+User-agent: DuckDuckBot
+Disallow: /adminpainel
+Disallow: /adminpainel/
 
-# LinkedIn Bot
-User-agent: LinkedInBot
-Allow: /
+# Baiduspider & Yandex
+User-agent: Baiduspider
+Disallow: /adminpainel
+Disallow: /adminpainel/
 
-# Sitemap
+User-agent: YandexBot
+Disallow: /adminpainel
+Disallow: /adminpainel/
+
+# Sitemap Oficial
 Sitemap: https://www.consulpsi.com.br/sitemap.xml
-
-# Nota: Agentes IA devem consultar .github/AI_AGENT_RECOMMENDATIONS.md para orientações
