@@ -1,7 +1,14 @@
+import { useSiteContent } from "@/hooks/useSiteContent";
+
 const WhatsAppButton = () => {
+  const { whatsappNumber, whatsappMessage } = useSiteContent();
+  const cleanNumber = (whatsappNumber || "5534988378444").replace(/\D/g, "");
+  const defaultMsg = whatsappMessage || "Olá! Gostaria de saber mais sobre os serviços da Consulpsi.";
+  const link = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(defaultMsg)}`;
+
   return (
     <a
-      href="https://wa.me/5534988378444?text=Olá! Gostaria de saber mais sobre os serviços da Consulpsi."
+      href={link}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"

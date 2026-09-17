@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import teamImage from "../../imagens/secao-2-equipe/equipe-consulpsi-secao-2.png";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const QuemSomosSection = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { quemSomosImage } = useSiteContent();
+  const displayImage = quemSomosImage || teamImage;
 
   return (
     <section id="quem-somos" className="py-14 pb-25 relative" style={{ backgroundColor: "#E6E5E4" }}>
@@ -42,7 +45,7 @@ const QuemSomosSection = () => {
             <div className={`rounded-2xl overflow-hidden transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-75'}`}
               style={{ boxShadow: "0 0 30px 8px rgba(0, 0, 0, 0.5)" }}>
               <img
-                src={teamImage}
+                src={displayImage}
                 alt="Equipe Consulpsi"
                 className="w-full object-cover max-h-[400px]"
                 loading="lazy"

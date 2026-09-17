@@ -1,6 +1,6 @@
-/* Assinatura Digital Consulpsi - Empresa Junior de Consultoria em RH */
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-consulpsi-hero.png";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const servicosItems = [
   "Processo Seletivo",
@@ -12,6 +12,10 @@ const servicosItems = [
 ];
 
 const Footer = () => {
+  const { whatsappNumber, contactEmail } = useSiteContent();
+  const cleanNumber = (whatsappNumber || "5534988378444").replace(/\D/g, "");
+  const email = contactEmail || "vendasconsulpsi@gmail.com";
+
   const scrollToServicos = () => {
     document.querySelector("#servicos")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -61,11 +65,11 @@ const Footer = () => {
               <ul className="space-y-2.5 text-sm font-body text-primary-foreground/70 mb-5">
                 <li>
                   <a
-                    href="mailto:vendasconsulpsi@gmail.com"
+                    href={`mailto:${email}`}
                     className="inline-block relative transition-all duration-300 hover:text-[#FFB964] hover:translate-x-1 after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-px after:bg-[#FFB964]/50 after:transition-all after:duration-300"
                   >
-                    <span className="block">vendasconsulpsi</span>
-                    <span className="block">@gmail.com</span>
+                    <span className="block">{email.split("@")[0]}</span>
+                    <span className="block">@{email.split("@")[1] || "gmail.com"}</span>
                   </a>
                 </li>
                 <li>
@@ -107,7 +111,7 @@ const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/5534988378444"
+                  href={`https://wa.me/${cleanNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
+import { useSiteContent } from "@/hooks/useSiteContent";
+import { adminService } from "@/services/adminService";
 import {
   sanitizeName,
   sanitizeEmail,
@@ -17,6 +19,9 @@ import {
 } from "@/lib/security";
 
 const ContatoSection = () => {
+  const { contactEmail, whatsappDisplay } = useSiteContent();
+  const displayEmail = contactEmail || "vendasconsulpsi@gmail.com";
+  const displayPhone = whatsappDisplay || "(34) 98837-8444";
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [csrfToken] = useState(() => initializeCSRFToken());
@@ -67,7 +72,14 @@ const ContatoSection = () => {
 
       setIsSubmitting(true);
 
-      const response = await fetch("https://formsubmit.co/ajax/vendasconsulpsi@gmail.com", {
+      // Salvar resposta no banco de dados administrativo imediatamente
+      adminService.addFormSubmission({
+        name: sanitizedName,
+        email: sanitizedEmail,
+        message: sanitizedMessage,
+      });
+
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(displayEmail)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,27 +155,27 @@ const ContatoSection = () => {
 
             <div className="space-y-4">
               <a
-                href="mailto:vendasconsulpsi@gmail.com"
+                href={`mailto:${displayEmail}`}
                 className="group flex items-center gap-4 cursor-pointer"
-                aria-label="Enviar e-mail para vendasconsulpsi@gmail.com"
+                aria-label={`Enviar e-mail para ${displayEmail}`}
               >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Mail className="text-primary" size={18} />
                 </div>
-                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">vendasconsulpsi@gmail.com</span>
+                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">{displayEmail}</span>
               </a>
               <button
                 onClick={() => {
-                  navigator.clipboard.writeText("(34) 98837-8444");
+                  navigator.clipboard.writeText(displayPhone);
                   toast.success("Telefone copiado!");
                 }}
                 className="group flex items-center gap-4 cursor-pointer"
-                aria-label="Copiar telefone (34) 98837-8444"
+                aria-label={`Copiar telefone ${displayPhone}`}
               >
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <Phone className="text-primary" size={18} />
                 </div>
-                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">(34) 98837-8444</span>
+                <span className="text-foreground font-body text-sm transition-all duration-200 group-hover:text-[#FFB964] group-hover:scale-105 origin-left">{displayPhone}</span>
               </button>
               <a
                 href="https://www.google.com/maps/search/?api=1&query=Bloco+2E+-+Agronomia+UFU"
