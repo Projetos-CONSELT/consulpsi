@@ -72,37 +72,44 @@ const ContatoSection = () => {
 
       setIsSubmitting(true);
 
-      // Salvar resposta no banco de dados administrativo imediatamente
+      // Salvar resposta no banco de dados administrativo (Painel + Supabase) imediatamente
       adminService.addFormSubmission({
         name: sanitizedName,
         email: sanitizedEmail,
         message: sanitizedMessage,
       });
 
-      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(displayEmail)}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          _subject: "Nova mensagem do site Consulpsi",
-          _template: "table",
-          _captcha: "false",
-          _next: "https://www.consulpsi.com.br/",
-          nome: sanitizedName,
-          email: sanitizedEmail,
-          mensagem: sanitizedMessage,
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent.substring(0, 100),
-        }),
-      });
+      // Enviar notificação externa por e-mail via FormSubmit (sem travar a submissão do usuário em caso de resposta não-JSON ou ativação pendente)
+      try {
+        const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(displayEmail)}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            _subject: "Nova mensagem do site Consulpsi",
+            _template: "table",
+            _captcha: "false",
+            _next: "https://www.consulpsi.com.br/",
+            nome: sanitizedName,
+            email: sanitizedEmail,
+            mensagem: sanitizedMessage,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent.substring(0, 100),
+          }),
+        });
 
-      // Validar resposta
-      validateAPIResponse(response);
-
-      if (!response.ok) {
-        throw new Error("Falha no envio do formulário");
+        if (response.ok) {
+          validateAPIResponse(response);
+        }
+      } catch (emailErr) {
+        console.warn("Aviso na notificação externa por e-mail:", emailErr);
+        securityLogger.log(
+          "email-notification-notice",
+          "Mensagem salva no sistema com sucesso. Notificação externa por e-mail em segundo plano.",
+          "low"
+        );
       }
 
       toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");

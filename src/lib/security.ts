@@ -319,10 +319,18 @@ export const securityLogger = new SecurityLogger();
  * Valida resposta de API
  */
 export const validateAPIResponse = (response: Response): void => {
-  // Verificar Content-Type
+  if (!response.ok) {
+    throw new Error(`Falha no envio (Código ${response.status})`);
+  }
+
+  // Verificar Content-Type de forma não bloqueante para provedores externos
   const contentType = response.headers.get("content-type");
-  if (!contentType?.includes("application/json")) {
-    throw new Error("Resposta inválida do servidor");
+  if (contentType && !contentType.includes("application/json")) {
+    securityLogger.log(
+      "api-content-type-notice",
+      `Resposta da API com content-type: ${contentType}`,
+      "low"
+    );
   }
 
   // Verificar headers de segurança
@@ -336,8 +344,8 @@ export const validateAPIResponse = (response: Response): void => {
     if (!response.headers.has(header)) {
       securityLogger.log(
         "missing-security-header",
-        `Header de segurança faltando: ${header}`,
-        "medium",
+        `Header de segurança ausente: ${header}`,
+        "low",
         { header }
       );
     }
