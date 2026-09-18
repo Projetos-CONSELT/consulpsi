@@ -18,7 +18,6 @@ import {
   Inbox,
   KeyRound,
   ShieldAlert,
-  Sparkles,
 } from "lucide-react";
 import logoHeader from "@/assets/logo-consulpsi-header.png";
 
@@ -247,13 +246,6 @@ const AdminPanel = () => {
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
-              </div>
-
-              <div className="p-3 bg-amber-50 rounded-lg border border-amber-200/60 text-xs text-amber-800 flex items-start gap-2">
-                <Sparkles size={14} className="text-amber-600 mt-0.5 shrink-0" />
-                <span>
-                  Senha padrão inicial: <strong className="font-mono font-bold">admin123</strong> (protegida com criptografia SHA-256).
-                </span>
               </div>
 
               <button
