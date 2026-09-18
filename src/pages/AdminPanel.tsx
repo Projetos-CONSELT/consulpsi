@@ -16,17 +16,15 @@ import {
   Quote,
   MessageSquare,
   Inbox,
-  Database,
   KeyRound,
   ShieldAlert,
-  Copy,
   Sparkles,
 } from "lucide-react";
 import logoHeader from "@/assets/logo-consulpsi-header.png";
 
 const AdminPanel = () => {
   const [session, setSession] = useState<AdminAuthSession | null>(() => adminService.getSession());
-  const [activeTab, setActiveTab] = useState<"quem-somos" | "cases" | "whatsapp" | "leads" | "sql">("quem-somos");
+  const [activeTab, setActiveTab] = useState<"quem-somos" | "cases" | "whatsapp" | "leads">("quem-somos");
 
   // Login Form State
   const [loginEmail, setLoginEmail] = useState("admin@consulpsi.com.br");
@@ -40,6 +38,9 @@ const AdminPanel = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Data State
   const [settings, setSettings] = useState<SiteSettings>(() => adminService.getSettings());
@@ -138,6 +139,16 @@ const AdminPanel = () => {
     toast.info("Você saiu do painel administrativo.");
   };
 
+  const resetPasswordModal = () => {
+    setIsPasswordModalOpen(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
+  };
+
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -147,47 +158,10 @@ const AdminPanel = () => {
     const res = await adminService.changePassword(currentPassword, newPassword);
     if (res.success) {
       toast.success(res.message);
-      setIsPasswordModalOpen(false);
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      resetPasswordModal();
     } else {
       toast.error(res.message);
     }
-  };
-
-  const copySqlSchema = () => {
-    const sqlText = `-- Schema SQL Consulpsi
-CREATE TABLE IF NOT EXISTS site_settings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    key TEXT UNIQUE NOT NULL,
-    value TEXT NOT NULL,
-    description TEXT,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS cases_sucesso (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    role TEXT NOT NULL,
-    text TEXT NOT NULL,
-    image_url TEXT NOT NULL,
-    order_index INTEGER DEFAULT 0,
-    active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS form_submissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    message TEXT NOT NULL,
-    status TEXT DEFAULT 'unread' CHECK (status IN ('unread', 'read', 'answered', 'archived')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);`;
-    navigator.clipboard.writeText(sqlText);
-    toast.success("Script SQL copiado para a área de transferência!");
   };
 
   const unreadLeadsCount = submissions.filter((s) => s.status === "unread").length;
@@ -260,13 +234,15 @@ CREATE TABLE IF NOT EXISTS form_submissions (
                     disabled={lockoutSecs > 0}
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-10 disabled:opacity-50"
+                    className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-11 disabled:opacity-50"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                    title={showPassword ? "Ocultar senha" : "Ver senha"}
+                    aria-label={showPassword ? "Ocultar senha" : "Ver senha"}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -462,18 +438,6 @@ CREATE TABLE IF NOT EXISTS form_submissions (
                 </span>
               )}
             </button>
-
-            <button
-              onClick={() => setActiveTab("sql")}
-              className={`py-3 px-4 text-sm font-medium border-b-2 whitespace-nowrap transition-colors flex items-center gap-2 ${
-                activeTab === "sql"
-                  ? "border-[#621816] text-[#621816] font-bold"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              <Database size={18} />
-              Banco de Dados SQL
-            </button>
           </nav>
         </div>
 
@@ -494,85 +458,6 @@ CREATE TABLE IF NOT EXISTS form_submissions (
           {activeTab === "leads" && (
             <FormSubmissionsViewer submissions={submissions} onUpdate={refreshData} />
           )}
-
-          {activeTab === "sql" && (
-            <div className="space-y-6">
-              <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                      <Database className="text-[#621816]" size={22} />
-                      Script SQL e Estrutura do Banco de Dados
-                    </h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Script para PostgreSQL e Supabase com tabelas, RLS e dados iniciais integrados.
-                    </p>
-                  </div>
-                  <button
-                    onClick={copySqlSchema}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#621816] text-white rounded-lg text-sm font-semibold hover:bg-[#7C1D1D] transition-colors"
-                  >
-                    <Copy size={16} />
-                    Copiar Script SQL
-                  </button>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-4 mt-6">
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                    <span className="text-xs font-bold text-gray-500 uppercase">Tabela 1</span>
-                    <h3 className="font-bold text-gray-900 mt-1">site_settings</h3>
-                    <p className="text-xs text-gray-600 mt-1">Armazena imagem da Seção 2, WhatsApp e configurações gerais.</p>
-                  </div>
-
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                    <span className="text-xs font-bold text-gray-500 uppercase">Tabela 2</span>
-                    <h3 className="font-bold text-gray-900 mt-1">cases_sucesso</h3>
-                    <p className="text-xs text-gray-600 mt-1">Armazena depoimentos, clientes, fotos e ordem de exibição.</p>
-                  </div>
-
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                    <span className="text-xs font-bold text-gray-500 uppercase">Tabela 3</span>
-                    <h3 className="font-bold text-gray-900 mt-1">form_submissions</h3>
-                    <p className="text-xs text-gray-600 mt-1">Armazena todas as mensagens e leads enviados pelo formulário.</p>
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <div className="bg-[#1E293B] text-gray-200 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-96">
-                    <pre>{`-- Arquivo gerado em /supabase/schema.sql
-CREATE TABLE IF NOT EXISTS site_settings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    key TEXT UNIQUE NOT NULL,
-    value TEXT NOT NULL,
-    description TEXT,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS cases_sucesso (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    role TEXT NOT NULL,
-    text TEXT NOT NULL,
-    image_url TEXT NOT NULL,
-    order_index INTEGER DEFAULT 0,
-    active BOOLEAN DEFAULT true,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS form_submissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    message TEXT NOT NULL,
-    status TEXT DEFAULT 'unread' CHECK (status IN ('unread', 'read', 'answered', 'archived')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
-);`}</pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </main>
 
@@ -589,45 +474,81 @@ CREATE TABLE IF NOT EXISTS form_submissions (
                 <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
                   Senha Atual *
                 </label>
-                <input
-                  type="password"
-                  required
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none"
-                />
+                <div className="relative">
+                  <input
+                    type={showCurrentPassword ? "text" : "password"}
+                    required
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-10"
+                    placeholder="Digite a senha atual"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                    title={showCurrentPassword ? "Ocultar senha" : "Ver senha"}
+                    aria-label={showCurrentPassword ? "Ocultar senha" : "Ver senha"}
+                  >
+                    {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
                   Nova Senha * (mínimo 6 caracteres)
                 </label>
-                <input
-                  type="password"
-                  required
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none"
-                />
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    required
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-10"
+                    placeholder="Digite a nova senha"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                    title={showNewPassword ? "Ocultar senha" : "Ver senha"}
+                    aria-label={showNewPassword ? "Ocultar senha" : "Ver senha"}
+                  >
+                    {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">
                   Confirmar Nova Senha *
                 </label>
-                <input
-                  type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none"
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#621816] focus:outline-none pr-10"
+                    placeholder="Confirme a nova senha"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                    title={showConfirmPassword ? "Ocultar senha" : "Ver senha"}
+                    aria-label={showConfirmPassword ? "Ocultar senha" : "Ver senha"}
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
                 <button
                   type="button"
-                  onClick={() => setIsPasswordModalOpen(false)}
+                  onClick={resetPasswordModal}
                   className="px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg"
                 >
                   Cancelar
