@@ -55,4 +55,4 @@ Disallow: /adminpainel
 Disallow: /adminpainel/
 
 # Sitemap Oficial
-Sitemap: https://www.consulpsi.com.br/sitemap.xml
+Sitemap: https://www.consulpsiconsultoria.com.br/sitemap.xml
